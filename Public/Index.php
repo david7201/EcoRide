@@ -139,10 +139,10 @@
   <nav class="navbar">
     <div class="navbar-logo">Ecoride Plus</div>
     <ul>
-      <li><a href="#">Home</a></li>
+      <li><a href="Index.php">Home</a></li>
       <li><a href="#">Services</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="rentals.php">Rentals</a></li>
+      <li><a href="adminpage.php">Admin</a></li>
     </ul>
     <button class="login-register-btn">Login / Register</button>
   </nav>
