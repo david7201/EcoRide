@@ -11,3 +11,22 @@ $dsn = "mysql:host=$host;dbname=$dbname"; // will use later
 $options = array(
  PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
  );
+
+
+/* Define username and password */
+$Username = "Steve";
+$Password = "pass";
+/* $db = new mysqli('localhost','myusername','mypassword','mydatabase');
+
+$sql = "SELECT username, password FROM users WHERE username = ?";
+$stmt = $db->prepare($sql);
+$stmt->bind_param('s', $Username);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+if($user && $user['password'] === $Password){
+  // Login successful
+} else {
+  // Login failed
+}*/

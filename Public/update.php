@@ -5,7 +5,7 @@
 try {
  require "../common.php";
  require_once '../src/DBconnect.php';
- $sql = "SELECT * FROM users";
+ $sql = "SELECT * FROM User";
  $statement = $connection->prepare($sql);
  $statement->execute();
  $result = $statement->fetchAll();
