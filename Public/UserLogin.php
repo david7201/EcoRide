@@ -1,4 +1,5 @@
 <?php
+global $password, $username;
 require_once ('../config.php');
 session_start();
 ?>
@@ -13,11 +14,11 @@ if(isset($_POST['Submit'])){
  /* these currently check against variable values stored in
 config.php but later we will see how these can be checked against
 information in a database*/
- if( ($_POST['Username'] == $Username) && ($_POST['Password'] ==
-$Password) )
+ if( ($_POST['username'] == $username) && ($_POST['Password'] ==
+$password) )
  {
  
- $_SESSION['Username'] = $Username;
+ $_SESSION['Username'] = $username;
  $_SESSION['Active'] = true;
  header("location:index.php"); /* 'header() is used to redirect
 the browser */

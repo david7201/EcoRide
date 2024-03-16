@@ -14,7 +14,7 @@ $options = array(
 
 
 /* Define username and password */
-$Username = "Steve";
+$username = "Steve";
 $Password = "pass";
 /* $db = new mysqli('localhost','myusername','mypassword','mydatabase');
 
