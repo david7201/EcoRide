@@ -13,9 +13,7 @@ $options = array(
  );
 
 
-/* Define username and password */
-$username = "Steve";
-$Password = "pass";
+
 /* $db = new mysqli('localhost','myusername','mypassword','mydatabase');
 
 $sql = "SELECT username, password FROM users WHERE username = ?";
