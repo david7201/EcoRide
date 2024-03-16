@@ -1,6 +1,7 @@
 <?php
 // User class definition
 global $connection;
+require "header.php";
 
 class User {
     private $connection;
