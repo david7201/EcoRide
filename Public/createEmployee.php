@@ -1,4 +1,5 @@
 <?php
+global $connection, $sql;
 require "header.php";
 
 if (isset($_POST['submit'])) {

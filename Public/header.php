@@ -146,7 +146,7 @@
  <nav class="navbar">
     <div class="navbar-logo">Ecoride Plus</div>
     <ul>
-      <li><a href="Index.php">Home</a></li>
+      <li><a href="../Index.php">Home</a></li>
       <li><a href="#">Services</a></li>
       <li><a href="rentals.php">Rentals</a></li>
       <li><a href="adminpage.php">Admin</a></li>

@@ -1,9 +1,11 @@
 <?php
+global $sql, $host, $username, $password, $options;
 /**
  * Open a connection via PDO to create a new database and table with structure. */
 require "config.php";
 try {
  $connection = new PDO("mysql:host=$host", $username, $password,
+
 $options);
  $sql = file_get_contents("data/init.sql");
  $connection->exec($sql);
@@ -14,7 +16,4 @@ $options);
 
 
  array(
- PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
- );
-
- 
+ PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
