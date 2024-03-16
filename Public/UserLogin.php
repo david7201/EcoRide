@@ -2,8 +2,9 @@
 global $connection;
 session_start();
 require "header.php";
-require_once ('../config.php'); // Include database configuration
 
+require_once ('../config.php'); // Include database configuration
+require_once 'DBconnect.php';
 
 // Check if the database connection is successful
 if (!$connection) {
@@ -20,7 +21,7 @@ if(isset($_POST['Submit'])){
     // Retrieve user credentials from the database
     // Assuming you have a table named 'users' with columns 'username' and 'password'
     // You need to modify this query according to your database schema
-    $query = "SELECT * FROM users WHERE username = :username";
+    $query = "SELECT * FROM user WHERE username = :username";
     $stmt = $connection->prepare($query);
     $stmt->bindParam(':username', $enteredUsername);
     $stmt->execute();
