@@ -12,13 +12,13 @@ NULL*/
 if(isset($_POST['Submit'])){
  /* Check if the form's username and password matches */
  /* these currently check against variable values stored in
-config.php but later we will see how these can be checked against
+config.php, but later we will see how these can be checked against
 information in a database*/
  if( ($_POST['username'] == $username) && ($_POST['Password'] ==
 $password) )
  {
  
- $_SESSION['Username'] = $username;
+ $_SESSION['username'] = $username;
  $_SESSION['Active'] = true;
  header("location:index.php"); /* 'header() is used to redirect
 the browser */
@@ -52,7 +52,7 @@ the browser */
     <form action="" method="post" name="Login_Form" class="form-signin">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputUsername" >Username</label>
-        <input name="Username" type="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+        <input name="username" type="username" id="username" class="form-control" placeholder="Username" required autofocus>
         <label for="inputPassword">Password</label>
         <input name="Password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
         <div class="checkbox">
