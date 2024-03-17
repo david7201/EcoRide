@@ -1,40 +1,37 @@
 <?php
-// User class definition
-global $connection;
-require "header.php";
+session_start();
 
-class User {
-    private $connection;
-
-    // Constructor to initialize the database connection
-    public function __construct($connection) {
-        $this->connection = $connection;
-    }
-
-
-    // Method to log in a user
-    public function login($username, $password) {
-        // Prepare and execute SQL statement to retrieve user from database
-        // (code for database operations)
-
-        // Check if user exists and password matches
-        // (code for authentication)
-    }
-}
-
-// Usage example
-require_once 'DBconnect.php'; // Assuming DB connection is established here
-
-// Create User object
-$user = new User($connection);
+// Include the database connection file
+require_once 'DBconnect.php';
 
 // Check if the form is submitted
-if (isset($_POST['submit'])) {
-    // Process form data and call signup or login method based on action
-    // (code for form processing)
+if(isset($_POST['Submit'])) {
+    // Get username and password from the form
+    $username = $_POST['Username'];
+    $password = $_POST['Password'];
+
+    // Prepare SQL statement to select user from the database
+    $sql = "SELECT * FROM User WHERE username = :username AND password = :password";
+
+    // Execute the SQL statement
+    $stmt = $connection->prepare($sql);
+    $stmt->bindParam(':username', $username);
+    $stmt->bindParam(':password', $password);
+    $stmt->execute();
+
+    // Check if a row is returned
+    if($stmt->rowCount() == 1) {
+        // User exists, set session variables and redirect to index.php
+        $_SESSION['username'] = $username;
+        $_SESSION['Active'] = true;
+        header("location: index.php"); // Redirect to index.php
+        exit;
+    } else {
+        // Invalid credentials
+        $error = "Incorrect Username or Password";
+    }
 }
 ?>
-
 
 
 <!DOCTYPE html>
