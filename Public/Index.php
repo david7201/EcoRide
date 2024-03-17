@@ -7,7 +7,6 @@ require_once 'DBconnect.php';
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
     $welcome_message = "Welcome, $username";
-    session_start();
 
 } else {
     $welcome_message = null;
