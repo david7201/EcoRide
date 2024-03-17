@@ -1,3 +1,3 @@
-class employee extends user {
+class employee extends User {
     
 }

@@ -1,16 +1,17 @@
 <?php
-require "header.php";
+require_once "header.php";
 require_once 'DBconnect.php';
 
-
 // Check if the user is logged in
-if (isset($_SESSION['username'])) {
-    $username = $_SESSION['username'];
+if (isset($_SESSION['Username'])) {
+    $username = $_SESSION['Username'];
     $welcome_message = "Welcome, $username";
 
 } else {
     $welcome_message = null;
 }
+
+
 
 ?>
 
@@ -23,15 +24,19 @@ if (isset($_SESSION['username'])) {
     <title>Simple Database App</title>
     <link rel="stylesheet" href="style.css" />
     <style>
-        /* Your CSS styles here */
     </style>
 </head>
 <body>
 <header class="hero">
     <div class="hero-text">
-        <h1>Welcome to Ecoride Plus</h1>
+        <h1>Welcome to Ecoride Plus <?php echo isset($_SESSION['Username']) ? $_SESSION['Username'] : ''; ?></h1>
         <p>Eco-friendly transport and motion services. We offer the best in class services for you and the environment.</p>
     </div>
+    <?php if (isset($_SESSION['Username'])) : ?>
+        <form action="logout.php" name="Logout_Form" class="form-signin">
+            <button name="Submit" value="Logout" class="button" type="submit">Log out</button>
+        </form>
+    <?php endif; ?>
 </header>
 
 <div class="main-content">
@@ -44,7 +49,6 @@ if (isset($_SESSION['username'])) {
         <p>Explore the various eco-friendly services we provide.</p>
     </section>
 </div>
-
 
 </body>
 </html>

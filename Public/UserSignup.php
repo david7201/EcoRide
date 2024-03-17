@@ -1,11 +1,17 @@
 <?php
-global $connection, $connection;
-require "header.php";
-require_once 'User.php';
+require_once('../config.php');
+require_once('../src/DBconnect.php');
+require_once('User.php');
+require ('header.php');
 
 if (isset($_POST['submit'])) {
+
     // Connect to the database
     require_once 'DBconnect.php';
+
+    // Include the database connection file
+    require_once '../src/DBconnect.php';
+
 
     // Create a new User object with the database connection
     $user = new User($connection);
@@ -28,34 +34,31 @@ if (isset($_POST['submit'])) {
         // Redirect to login page after signup
         header("location: UserLogin.php");
         exit();
+        // Attempt to authenticate the user after registration
+        $user->setUsername($username);
+        $user->setPassword($password);
+        $authenticatedUser = $user->authenticate();
+
+        if ($authenticatedUser) {
+            session_start();
+            $_SESSION['UserID'] = $authenticatedUser['UserID'];
+            $_SESSION['Username'] = $authenticatedUser['username'];
+            $_SESSION['Active'] = true;
+
+            header("location:index.php");
+            exit();
+        } else {
+            $error = "Authentication failed after registration. Please try logging in manually.";
+        }
     } else {
         $error = $result;
     }
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<nav class="navbar">
-    <div class="navbar-logo">Ecoride Plus</div>
-    <ul>
-        <li><a href="Index.php">Home</a></li>
-        <li><a href="Services.php">Services</a></li>
-        <li><a href="rentals.php">Rentals</a></li>
-        <li><a href="adminpage.php">Admin</a></li>
-    </ul>
-    <button class="login-register-btn"><a href="ChooseLogin.php">Login / Register</a></button>
-</nav>
-
 <div class="container">
     <h2>User Registration</h2>
+    <?php if(!empty($error)) { echo "<div class='error'>$error</div>"; } ?>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <div class="form-group">
             <label for="firstname">First Name:</label>
@@ -91,7 +94,6 @@ if (isset($_POST['submit'])) {
         </div>
         <button type="submit" name="submit">Sign Up</button>
     </form>
-    <?php if(isset($error)) { echo "<div class='error'>$error</div>"; } ?>
 </div>
 
 </body>

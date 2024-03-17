@@ -1,6 +1,13 @@
 <?php
+require_once ('../config.php'); // This is where the username and
+require_once '../src/DBconnect.php';
+
 class User {
     private $connection;
+
+    public function __construct($connection) {
+        $this->connection = $connection;
+    }
     private $firstname;
     private $lastname;
     private $username;
@@ -9,11 +16,6 @@ class User {
     private $email;
     private $contactno;
     private $location;
-
-    // Constructor to initialize the database connection
-    public function __construct($connection) {
-        $this->connection = $connection;
-    }
 
     // Setter and getter methods for first name
     public function setFirstName($firstname) {
@@ -87,7 +89,6 @@ class User {
         return $this->location;
     }
 
-
     // Method to register a new user
     public function register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location) {
         // Hash the password
@@ -95,7 +96,7 @@ class User {
         echo strlen($hashedPassword);
 
         // Prepare SQL statement with interpolated values
-        $sql = "INSERT INTO User (firstName, lastName, username, password, age, email, contactno, location) 
+        $sql = "INSERT INTO User (firstName, lastName, username, password, age, email, contactno, location)
                 VALUES ('$firstname', '$lastname', '$username', '$hashedPassword', $age, '$email', '$contactno', '$location')";
 
         // Execute the statement
@@ -103,6 +104,43 @@ class User {
             return true; // Registration successful
         } else {
             return "Registration failed. Please try again later."; // Registration failed
+    public function register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location) {
+        try {
+            // Check if the email already exists in the database
+            $query = "SELECT COUNT(*) FROM user WHERE email = ?";
+            $statement = $this->connection->prepare($query);
+            $statement->execute([$email]);
+            $count = $statement->fetchColumn();
+
+            if ($count > 0) {
+                return "Email address already exists.";
+            }
+
+            // Hash the password before storing it in the database
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            // Prepare the SQL statement for user registration
+            $query = "INSERT INTO user (firstname, lastname, username, password, age, email, contactno, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $statement = $this->connection->prepare($query);
+
+            // Execute the statement with the provided values
+            $statement->execute([$firstname, $lastname, $username, $hashedPassword, $age, $email, $contactno, $location]);
+
+            return true; // Return true on successful registration
+        } catch (PDOException $e) {
+            return $e->getMessage(); // Return error message if an exception occurs
+        }
+    }
+
+    public function authenticate() {
+        try {
+            $query = "SELECT * FROM user WHERE username = ?";
+            $statement = $this->connection->prepare($query);
+            $statement->execute([$this->username]);
+            $user = $statement->fetch(PDO::FETCH_ASSOC);
+            return $user;
+        } catch (PDOException $e) {
+            return null; // Return null if an exception occurs
         }
     }
 }

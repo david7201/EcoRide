@@ -14,17 +14,3 @@ $options = array(
 
 
 
-/* $db = new mysqli('localhost','myusername','mypassword','mydatabase');
-
-$sql = "SELECT username, password FROM users WHERE username = ?";
-$stmt = $db->prepare($sql);
-$stmt->bind_param('s', $Username);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-
-if($user && $user['password'] === $Password){
-  // Login successful
-} else {
-  // Login failed
-}*/
