@@ -1,5 +1,5 @@
 <?php 
-//require "SessionActive.php"; ?>
+//require "SessionActive.php"; ?>global$connection; global$connection;
 <!DOCTYPE html>
 <html lang="en">
 <head>

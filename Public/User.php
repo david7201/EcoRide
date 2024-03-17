@@ -87,57 +87,21 @@ class User {
         return $this->location;
     }
 
-    // Method to log in a user
-    public function login($username, $password) {
-        // Prepare SQL statement to fetch user by username
-        $sql = "SELECT * FROM User WHERE username = :username";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
-        $stmt->execute();
-
-        // Fetch user record
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Check if user exists and password is correct
-        if ($user && password_verify($password, $user['password'])) {
-            // Authentication successful
-            return true;
-        } else {
-            // Invalid username or password
-            return false;
-        }
-    }
-
-
-    // Method to check if user is logged in
-    public function isLoggedIn() {
-        return isset($_SESSION['username']);
-    }
 
     // Method to register a new user
     public function register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location) {
-        // Prepare an INSERT statement
-        $sql = "INSERT INTO User (firstName, lastName, username, password, age, email, contactno, location) 
-                VALUES (:firstname, :lastname, :username, :password, :age, :email, :contactno, :location)";
-        $stmt = $this->connection->prepare($sql);
+        // Hash the password
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Bind parameters
-        $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
-        $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
-        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
-        $stmt->bindParam(':password', $password, PDO::PARAM_STR);
-        $stmt->bindParam(':age', $age, PDO::PARAM_INT);
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->bindParam(':contactno', $contactno, PDO::PARAM_STR);
-        $stmt->bindParam(':location', $location, PDO::PARAM_STR);
+        // Prepare SQL statement with interpolated values
+        $sql = "INSERT INTO User (firstName, lastName, username, password, age, email, contactno, location) 
+                VALUES ('$firstname', '$lastname', '$username', '$hashedPassword', $age, '$email', '$contactno', '$location')";
 
         // Execute the statement
-        if ($stmt->execute()) {
-            // Registration successful
-            return true;
+        if ($this->connection->exec($sql)) {
+            return true; // Registration successful
         } else {
-            // Registration failed
-            return "Registration failed. Please try again later.";
+            return "Registration failed. Please try again later."; // Registration failed
         }
     }
 }
