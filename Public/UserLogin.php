@@ -68,8 +68,6 @@ $logged_in = isset($_SESSION['username']) && $_SESSION['Active'] === true;
 </div>
 
 <?php if ($logged_in) { ?>
-    <!-- User is logged in -->
-    <!-- Add user-specific content here -->
 <?php } ?>
 
 </body>
