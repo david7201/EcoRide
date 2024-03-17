@@ -1,3 +1,13 @@
+<?php
+// Check if the user is logged in
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+    $welcome_message = "Welcome, $username";
+} else {
+    $welcome_message = null;
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -151,5 +161,15 @@
       <li><a href="rentals.php">Rentals</a></li>
       <li><a href="adminpage.php">Admin</a></li>
     </ul>
-    <button class="login-register-btn"><a href="ChooseLogin.php">Login / Register</a></button>
+     <!-- Display welcome message -->
+     <h4><?php echo $welcome_message; ?></h4>
+     <?php if (isset($_SESSION['username'])) { ?>
+         <!-- If the User is logged in -->
+         <!-- Add user-specific content here -->
+         <button onclick="location.href='logout.php'">Logout</button>
+     <?php } else { ?>
+         <!-- If the User is not logged in -->
+         <button class="login-register-btn"><a href="ChooseLogin.php">Login / Register</a></button>
+
+     <?php } ?>
   </nav>

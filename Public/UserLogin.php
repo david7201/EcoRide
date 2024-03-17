@@ -1,31 +1,33 @@
 <?php
+// Start session
 global $connection;
 session_start();
 
-// Include the User class definition
+// Include necessary files
+require "header.php";
 require_once 'User.php';
-
-// Include the database connection file
 require_once 'DBconnect.php';
 
-// Create User object
-$user = new User($connection);
-
-// Check if the form is submitted
+// Check if the login form is submitted
 if(isset($_POST['Submit'])) {
     // Get username and password from the form
     $username = $_POST['Username'];
     $password = $_POST['Password'];
+
+    // Create a new instance of the User class with the database connection
+    $user = new User($connection);
 
     // Call the login method of the User object
     $result = $user->login($username, $password);
 
     // Check the result of the login attempt
     if($result === true) {
-        // User is authenticated, set session variables and redirect to index.php
+        // User is authenticated, set session variables
         $_SESSION['username'] = $username;
         $_SESSION['Active'] = true;
-        header("location: index.php"); // Redirect to index.php
+
+        // Redirect to index.php
+        header("location: index.php");
         exit;
     } else {
         // Invalid credentials
@@ -34,7 +36,7 @@ if(isset($_POST['Submit'])) {
 }
 
 // Check if the user is logged in
-$logged_in = $user->isLoggedIn();
+$logged_in = isset($_SESSION['username']) && $_SESSION['Active'] === true;
 ?>
 
 <!DOCTYPE html>
@@ -52,7 +54,7 @@ $logged_in = $user->isLoggedIn();
     <form action="" method="post" name="Login_Form" class="form-signin">
         <h2 class="form-signin-heading">Please sign in</h2>
         <?php if(isset($error)) { echo "<div class='error'>$error</div>"; } ?>
-        <label for="inputUsername" >Username</label>
+        <label for="inputUsername">Username</label>
         <input name="Username" type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
         <label for="inputPassword">Password</label>
         <input name="Password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
@@ -68,21 +70,7 @@ $logged_in = $user->isLoggedIn();
 <?php if ($logged_in) { ?>
     <!-- User is logged in -->
     <!-- Add user-specific content here -->
-    <nav class="navbar">
-        <div class="navbar-logo">Ecoride Plus</div>
-        <ul>
-            <li><a href="Index.php">Home</a></li>
-            <li><a href="Services.php">Services</a></li>
-            <li><a href="rentals.php">Rentals</a></li>
-            <li><a href="adminpage.php">Admin</a></li>
-        </ul>
-        <!-- Display welcome message -->
-        <h4>Welcome, <?php echo $_SESSION['username']; ?></h4>
-        <!-- Logout button -->
-        <form action="logout.php" method="post">
-            <button type="submit" name="logout">Logout</button>
-        </form>
-    </nav>
 <?php } ?>
+
 </body>
 </html>

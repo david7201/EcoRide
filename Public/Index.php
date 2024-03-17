@@ -9,7 +9,7 @@ if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
     $welcome_message = "Welcome, $username";
 } else {
-    $welcome_message = "Welcome!";
+    $welcome_message = null;
 }
 
 ?>
@@ -27,30 +27,24 @@ if (isset($_SESSION['username'])) {
     </style>
 </head>
 <body>
+<header class="hero">
+    <div class="hero-text">
+        <h1>Welcome to Ecoride Plus</h1>
+        <p>Eco-friendly transport and motion services. We offer the best in class services for you and the environment.</p>
+    </div>
+</header>
 
-<nav class="navbar">
-    <div class="navbar-logo">Ecoride Plus</div>
-    <ul>
-        <li><a href="Index.php">Home</a></li>
-        <li><a href="Services.php">Services</a></li>
-        <li><a href="rentals.php">Rentals</a></li>
-        <li><a href="adminpage.php">Admin</a></li>
-    </ul>
-    <!-- Display welcome message -->
-    <h4><?php echo $welcome_message; ?></h4>
-    <?php if (isset($_SESSION['username'])) { ?>
-        <!-- User is logged in -->
-        <!-- Add user-specific content here -->
-        <button onclick="location.href='logout.php'">Logout</button>
-    <?php } else { ?>
-        <!-- User is not logged in -->
-        <!-- Add content for non-logged-in users here -->
-        <button onclick="location.href='login.php'">Login</button>
-        <button onclick="location.href='signup.php'">Sign Up</button>
-    <?php } ?>
-</nav>
+<div class="main-content">
+    <aside class="sidebar">
+        <h3>About Us</h3>
+        <p>Learn more about our mission and services.</p>
+    </aside>
+    <section class="main-section">
+        <h2>Our Services</h2>
+        <p>Explore the various eco-friendly services we provide.</p>
+    </section>
+</div>
 
-<!-- Your HTML content here -->
 
 </body>
 </html>

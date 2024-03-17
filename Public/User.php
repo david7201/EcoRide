@@ -89,8 +89,25 @@ class User {
 
     // Method to log in a user
     public function login($username, $password) {
-        // Logic to authenticate user
+        // Prepare SQL statement to fetch user by username
+        $sql = "SELECT * FROM User WHERE username = :username";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Fetch user record
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Check if user exists and password is correct
+        if ($user && password_verify($password, $user['password'])) {
+            // Authentication successful
+            return true;
+        } else {
+            // Invalid username or password
+            return false;
+        }
     }
+
 
     // Method to check if user is logged in
     public function isLoggedIn() {
