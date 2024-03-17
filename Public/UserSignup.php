@@ -4,7 +4,7 @@ require "header.php";
 require_once 'User.php';
 
 if (isset($_POST['submit'])) {
-    // Include the database connection file
+    // Connect to the database
     require_once 'DBconnect.php';
 
     // Create a new User object with the database connection
@@ -20,12 +20,12 @@ if (isset($_POST['submit'])) {
     $contactno = $_POST['contactno'];
     $location = $_POST['location'];
 
-    // Attempt to register the user
+    //  register the user
     $result = $user->register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location);
 
-    // Check registration result
+    //  registration result
     if ($result === true) {
-        // Redirect to login page after successful signup
+        // Redirect to login page after signup
         header("location: UserLogin.php");
         exit();
     } else {
