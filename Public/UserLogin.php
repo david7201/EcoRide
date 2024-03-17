@@ -1,7 +1,7 @@
 <?php
 require_once('../config.php');
 require_once('../src/DBconnect.php');
-require_once('User.php'); // Include the User class file
+require_once('Customer.php'); // Include the User class file
 
 session_start();
 
