@@ -1,53 +1,51 @@
 <?php
-// Start session
-global $connection;
+require_once('../config.php');
+require_once('../src/DBconnect.php');
+require_once('User.php'); // Include the User class file
+
 session_start();
 
-// Include necessary files
-require "header.php";
-require_once 'User.php';
-require_once 'DBconnect.php';
-
-// Check if the login form is submitted
 if(isset($_POST['Submit'])) {
-    // Get username and password from the form
+
+   
+ 
     $username = $_POST['Username'];
     $password = $_POST['Password'];
 
-    // Create a new instance of the User class with the database connection
+    // Create an instance of the User class
     $user = new User($connection);
 
-    // Call the login method of the User object
-    $result = $user->login($username, $password);
+    // Set username and password using setters
+    $user->setUsername($username);
+    $user->setPassword($password);
 
-    // Check the result of the login attempt
-    if($result === true) {
-        // User is authenticated, set session variables
-        $_SESSION['username'] = $username;
+    // Authentication logic directly within the login script
+    $stmt = $connection->prepare("SELECT * FROM user WHERE username = ?");
+    $stmt->execute([$user->getUsername()]);
+    $authenticatedUser = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Verify if the user exists and the password matches
+    if ($authenticatedUser && password_verify($user->getPassword(), $authenticatedUser['password'])) {
+        $_SESSION['UserID'] = $authenticatedUser['UserID'];
+        $_SESSION['Username'] = $authenticatedUser['username'];
         $_SESSION['Active'] = true;
 
-        // Redirect to index.php
-        header("location: index.php");
+        header("location:index.php");
         exit;
     } else {
-        // Invalid credentials
         $error = "Incorrect Username or Password";
     }
 }
-
-// Check if the user is logged in
-$logged_in = isset($_SESSION['username']) && $_SESSION['Active'] === true;
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sign in</title>
     <link rel="stylesheet" type="text/css" href="../css/signin.css">
     <link rel="stylesheet" type="text/css" href="../css/stylesheet.css">
+    <title>Sign in</title>
 </head>
 <body>
 <div class="container">
@@ -66,11 +64,5 @@ $logged_in = isset($_SESSION['username']) && $_SESSION['Active'] === true;
         <button name="Submit" value="Login" class="button" type="submit">Sign in</button>
     </form>
 </div>
-
-<?php if ($logged_in) { ?>
-    <!-- User is logged in -->
-    <!-- Add user-specific content here -->
-<?php } ?>
-
 </body>
 </html>

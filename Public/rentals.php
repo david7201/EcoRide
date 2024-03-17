@@ -1,5 +1,6 @@
 <?php 
-//require "SessionActive.php"; ?>
+require "SessionActive.php"; 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

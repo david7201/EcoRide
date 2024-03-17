@@ -1,6 +1,13 @@
 <?php
+require_once ('../config.php'); // This is where the username and
+require_once '../src/DBconnect.php';
+
 class User {
     private $connection;
+
+    public function __construct($connection) {
+        $this->connection = $connection;
+    }
     private $firstname;
     private $lastname;
     private $username;
@@ -9,11 +16,6 @@ class User {
     private $email;
     private $contactno;
     private $location;
-
-    // Constructor to initialize the database connection
-    public function __construct($connection) {
-        $this->connection = $connection;
-    }
 
     // Setter and getter methods for first name
     public function setFirstName($firstname) {
@@ -87,57 +89,43 @@ class User {
         return $this->location;
     }
 
-    // Method to log in a user
-    public function login($username, $password) {
-        // Prepare SQL statement to fetch user by username
-        $sql = "SELECT * FROM User WHERE username = :username";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
-        $stmt->execute();
-
-        // Fetch user record
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Check if user exists and password is correct
-        if ($user && password_verify($password, $user['password'])) {
-            // Authentication successful
-            return true;
-        } else {
-            // Invalid username or password
-            return false;
+    public function register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location) {
+        try {
+            // Check if the email already exists in the database
+            $query = "SELECT COUNT(*) FROM user WHERE email = ?";
+            $statement = $this->connection->prepare($query);
+            $statement->execute([$email]);
+            $count = $statement->fetchColumn();
+    
+            if ($count > 0) {
+                return "Email address already exists.";
+            }
+    
+            // Hash the password before storing it in the database
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    
+            // Prepare the SQL statement for user registration
+            $query = "INSERT INTO user (firstname, lastname, username, password, age, email, contactno, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $statement = $this->connection->prepare($query);
+    
+            // Execute the statement with the provided values
+            $statement->execute([$firstname, $lastname, $username, $hashedPassword, $age, $email, $contactno, $location]);
+    
+            return true; // Return true on successful registration
+        } catch (PDOException $e) {
+            return $e->getMessage(); // Return error message if an exception occurs
         }
     }
 
-
-    // Method to check if user is logged in
-    public function isLoggedIn() {
-        return isset($_SESSION['username']);
-    }
-
-    // Method to register a new user
-    public function register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location) {
-        // Prepare an INSERT statement
-        $sql = "INSERT INTO User (firstName, lastName, username, password, age, email, contactno, location) 
-                VALUES (:firstname, :lastname, :username, :password, :age, :email, :contactno, :location)";
-        $stmt = $this->connection->prepare($sql);
-
-        // Bind parameters
-        $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
-        $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
-        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
-        $stmt->bindParam(':password', $password, PDO::PARAM_STR);
-        $stmt->bindParam(':age', $age, PDO::PARAM_INT);
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->bindParam(':contactno', $contactno, PDO::PARAM_STR);
-        $stmt->bindParam(':location', $location, PDO::PARAM_STR);
-
-        // Execute the statement
-        if ($stmt->execute()) {
-            // Registration successful
-            return true;
-        } else {
-            // Registration failed
-            return "Registration failed. Please try again later.";
+    public function authenticate() {
+        try {
+            $query = "SELECT * FROM user WHERE username = ?";
+            $statement = $this->connection->prepare($query);
+            $statement->execute([$this->username]);
+            $user = $statement->fetch(PDO::FETCH_ASSOC);
+            return $user;
+        } catch (PDOException $e) {
+            return null; // Return null if an exception occurs
         }
     }
 }
