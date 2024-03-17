@@ -2,12 +2,13 @@
 require "header.php";
 require_once 'DBconnect.php';
 
-session_start();
 
 // Check if the user is logged in
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
     $welcome_message = "Welcome, $username";
+    session_start();
+
 } else {
     $welcome_message = null;
 }
