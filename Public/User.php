@@ -92,6 +92,7 @@ class User {
     public function register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location) {
         // Hash the password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        echo strlen($hashedPassword);
 
         // Prepare SQL statement with interpolated values
         $sql = "INSERT INTO User (firstName, lastName, username, password, age, email, contactno, location) 
