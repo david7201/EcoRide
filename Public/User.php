@@ -17,7 +17,6 @@ class User {
     private $contactno;
     private $location;
 
-    // Setter and getter methods for first name
     public function setFirstName($firstname) {
         $this->firstname = $firstname;
     }
@@ -26,7 +25,6 @@ class User {
         return $this->firstname;
     }
 
-    // Setter and getter methods for last name
     public function setLastName($lastname) {
         $this->lastname = $lastname;
     }
@@ -35,7 +33,6 @@ class User {
         return $this->lastname;
     }
 
-    // Setter and getter methods for username
     public function setUsername($username) {
         $this->username = $username;
     }
@@ -44,7 +41,6 @@ class User {
         return $this->username;
     }
 
-    // Setter and getter methods for password
     public function setPassword($password) {
         $this->password = $password;
     }
@@ -53,7 +49,6 @@ class User {
         return $this->password;
     }
 
-    // Setter and getter methods for age
     public function setAge($age) {
         $this->age = $age;
     }
@@ -62,7 +57,6 @@ class User {
         return $this->age;
     }
 
-    // Setter and getter methods for email
     public function setEmail($email) {
         $this->email = $email;
     }
@@ -71,7 +65,6 @@ class User {
         return $this->email;
     }
 
-    // Setter and getter methods for contact number
     public function setContactNo($contactno) {
         $this->contactno = $contactno;
     }
@@ -80,7 +73,6 @@ class User {
         return $this->contactno;
     }
 
-    // Setter and getter methods for location
     public function setLocation($location) {
         $this->location = $location;
     }
