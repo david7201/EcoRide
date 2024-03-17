@@ -1,62 +1,36 @@
 <?php
-// Include the database connection file
-global $connection;
-require_once 'DBconnect.php';
+global $connection, $connection;
+require "header.php";
+require_once 'User.php';
 
-// Check if the form is submitted
 if (isset($_POST['submit'])) {
-    var_dump($_POST); // Output the $_POST array for debuggings
-    // Define variables and initialize with empty values
-    $firstname = $lastname = $username = $password = $age = $email = $contactno = $location = "";
+    // Include the database connection file
+    require_once 'DBconnect.php';
 
-    // Processing form data when form is submitted
+    // Create a new User object with the database connection
+    $user = new User($connection);
+
+    // Get form data
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $username = $_POST['username'];
     $password = $_POST['password'];
     $age = $_POST['age'];
     $email = $_POST['email'];
-    $contactno = $_POST['contactno']; // Changed from 'Contact Number'
+    $contactno = $_POST['contactno'];
     $location = $_POST['location'];
-    $date = date("Y-m-d"); // Current date as signup date
 
+    // Attempt to register the user
+    $result = $user->register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location);
 
-
-    // Prepare an INSERT statement
-    $sql = "INSERT INTO User (firstName, lastName,username, password, age, email, contactno, location, date) 
-            VALUES (:firstname, :lastname, :username, :password, :age, :email, :contactno, :location, :date)";
-
-    if ($stmt = $connection->prepare($sql)) {
-        // Bind variables to the prepared statement as parameters
-        $stmt->bindParam(":firstname", $firstname);
-        $stmt->bindParam(":lastname", $lastname);
-        $stmt->bindParam(":username", $username);
-        $stmt->bindParam(":password", $password);
-        $stmt->bindParam(":age", $age);
-        $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":contactno", $contactno); // Changed from ':contactinfo'
-        $stmt->bindParam(":location", $location);
-        $stmt->bindParam(":date", $date);
-
-        // Attempt to execute the prepared statement
-        if ($stmt->execute()) {
-            // Redirect to login page after successful signup
-            header("location: UserLogin.php");
-            exit();
-        } else {
-            echo "Something went wrong. Please try again later.";
-        }
+    // Check registration result
+    if ($result === true) {
+        // Redirect to login page after successful signup
+        header("location: UserLogin.php");
+        exit();
     } else {
-        echo "Database connection error.";
+        $error = $result;
     }
-
-    // Close statement
-    unset($stmt);
-}
-
-// Close connection (if open)
-if ($connection) {
-    $connection = null;
 }
 ?>
 
@@ -97,7 +71,7 @@ if ($connection) {
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="text" id="password" name="password" required>
+            <input type="password" id="password" name="password" required>
         </div>
         <div class="form-group">
             <label for="age">Age:</label>
@@ -117,6 +91,7 @@ if ($connection) {
         </div>
         <button type="submit" name="submit">Sign Up</button>
     </form>
+    <?php if(isset($error)) { echo "<div class='error'>$error</div>"; } ?>
 </div>
 
 </body>

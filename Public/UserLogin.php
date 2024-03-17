@@ -1,8 +1,15 @@
 <?php
+global $connection;
 session_start();
+
+// Include the User class definition
+require_once 'User.php';
 
 // Include the database connection file
 require_once 'DBconnect.php';
+
+// Create User object
+$user = new User($connection);
 
 // Check if the form is submitted
 if(isset($_POST['Submit'])) {
@@ -10,18 +17,12 @@ if(isset($_POST['Submit'])) {
     $username = $_POST['Username'];
     $password = $_POST['Password'];
 
-    // Prepare SQL statement to select user from the database
-    $sql = "SELECT * FROM User WHERE username = :username AND password = :password";
+    // Call the login method of the User object
+    $result = $user->login($username, $password);
 
-    // Execute the SQL statement
-    $stmt = $connection->prepare($sql);
-    $stmt->bindParam(':username', $username);
-    $stmt->bindParam(':password', $password);
-    $stmt->execute();
-
-    // Check if a row is returned
-    if($stmt->rowCount() == 1) {
-        // User exists, set session variables and redirect to index.php
+    // Check the result of the login attempt
+    if($result === true) {
+        // User is authenticated, set session variables and redirect to index.php
         $_SESSION['username'] = $username;
         $_SESSION['Active'] = true;
         header("location: index.php"); // Redirect to index.php
@@ -31,11 +32,13 @@ if(isset($_POST['Submit'])) {
         $error = "Incorrect Username or Password";
     }
 }
+
+// Check if the user is logged in
+$logged_in = $user->isLoggedIn();
 ?>
 
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -61,5 +64,25 @@ if(isset($_POST['Submit'])) {
         <button name="Submit" value="Login" class="button" type="submit">Sign in</button>
     </form>
 </div>
+
+<?php if ($logged_in) { ?>
+    <!-- User is logged in -->
+    <!-- Add user-specific content here -->
+    <nav class="navbar">
+        <div class="navbar-logo">Ecoride Plus</div>
+        <ul>
+            <li><a href="Index.php">Home</a></li>
+            <li><a href="Services.php">Services</a></li>
+            <li><a href="rentals.php">Rentals</a></li>
+            <li><a href="adminpage.php">Admin</a></li>
+        </ul>
+        <!-- Display welcome message -->
+        <h4>Welcome, <?php echo $_SESSION['username']; ?></h4>
+        <!-- Logout button -->
+        <form action="logout.php" method="post">
+            <button type="submit" name="logout">Logout</button>
+        </form>
+    </nav>
+<?php } ?>
 </body>
 </html>
