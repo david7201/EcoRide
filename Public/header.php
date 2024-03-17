@@ -151,7 +151,8 @@
       <li><a href="adminpage.php">Admin</a></li>
     </ul>
      <!-- Display welcome message -->
-     <h4><?php echo $welcome_message; ?></h4>
+     <h4><?php $welcome_message = "Logged In";
+         echo $welcome_message; ?></h4>
      <?php if (isset($_SESSION['username'])) { ?>
          <!-- If the User is logged in -->
          <!-- Add user-specific content here -->
