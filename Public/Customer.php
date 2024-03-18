@@ -22,8 +22,20 @@ class customer extends user {
             $statement->execute([$email]);
             $count = $statement->fetchColumn();
 
-            if ($count > 0) {
-                return "Email address already exists.";
+            if ($count === true) {
+                // Redirect the user to the login page upon successful registration
+                header("location: login.php"); // Replace 'login.php' with the actual login page URL
+                exit();
+            } else {
+                // Handle the case where registration failed
+                if ($count === "Email address already exists.") {
+                    // Redirect the user to the login page if the email already exists
+                    header("location: login.php"); // Replace 'login.php' with the actual login page URL
+                    exit();
+                } else {
+                    // Handle other registration errors
+                    $error = $count;
+                }
             }
 
             // Prepare the SQL statement for user registration
@@ -68,16 +80,12 @@ class customer extends user {
     }
 
 
-    public function getDOB()
-    {
-        return $this->DOB;
-    }
-
 
     public function setDOB($DOB)
     {
         $this->DOB = $DOB;
     }
+
 
 
 
