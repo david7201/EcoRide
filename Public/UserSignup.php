@@ -24,6 +24,8 @@ if (isset($_POST['submit'])) {
     $customer->setEmail($_POST['email']);
     $customer->setContactNo($_POST['contactno']);
     $customer->setLocation($_POST['location']);
+    $customer->setDOB($_POST['DOB']);
+
 
     // Attempt to register the user and pass the form data as arguments
     $result = $customer->register(
@@ -34,7 +36,9 @@ if (isset($_POST['submit'])) {
         $_POST['age'],
         $_POST['email'],
         $_POST['contactno'],
-        $_POST['location']
+        $_POST['location'],
+        $_POST['DOB']
+
     );
 
     // Check registration result
@@ -97,6 +101,10 @@ if (isset($_POST['submit'])) {
         <div class="form-group">
             <label for="location">Location:</label>
             <input type="text" id="location" name="location" required>
+        </div>
+        <div class="form-group">
+            <label for="DOB">D.O.B.:</label>
+            <input type="date" id="DOB" name="DOB" required>
         </div>
         <button type="submit" name="submit">Sign Up</button>
     </form>
