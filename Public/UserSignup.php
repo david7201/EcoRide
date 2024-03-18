@@ -3,6 +3,7 @@ global $connection;
 require_once('../config.php');
 require_once('../src/DBconnect.php');
 require_once('User.php');
+require_once "Customer.php";
 require ('header.php');
 
 if (isset($_POST['submit'])) {
@@ -10,20 +11,22 @@ if (isset($_POST['submit'])) {
     require_once '../src/DBconnect.php';
 
     // Create a new User object with the database connection
-    $user = new User($connection);
+    //$user = new User($connection);
+    // Instantiate the 'customer' class
+    $customer = new customer($connection);
 
     // Get form data and set it to the user object
-    $user->setFirstName($_POST['firstname']);
-    $user->setLastName($_POST['lastname']);
-    $user->setUsername($_POST['username']);
-    $user->setPassword($_POST['password']);
-    $user->setAge($_POST['age']);
-    $user->setEmail($_POST['email']);
-    $user->setContactNo($_POST['contactno']);
-    $user->setLocation($_POST['location']);
+    $customer->setFirstName($_POST['firstname']);
+    $customer->setLastName($_POST['lastname']);
+    $customer->setUsername($_POST['username']);
+    $customer->setPassword($_POST['password']);
+    $customer->setAge($_POST['age']);
+    $customer->setEmail($_POST['email']);
+    $customer->setContactNo($_POST['contactno']);
+    $customer->setLocation($_POST['location']);
 
     // Attempt to register the user and pass the form data as arguments
-    $result = $user->register(
+    $result = $customer->register(
         $_POST['firstname'],
         $_POST['lastname'],
         $_POST['username'],
@@ -37,7 +40,7 @@ if (isset($_POST['submit'])) {
     // Check registration result
     if ($result === true) {
         // Attempt to authenticate the user after registration
-        $authenticatedUser = $user->authenticate();
+        $authenticatedUser = $customer->authenticate();
 
         if ($authenticatedUser) {
             session_start();
