@@ -1,7 +1,7 @@
 <?php
 require_once('../config.php');
 require_once('../src/DBconnect.php');
-require_once('User.php'); // Include the User class file
+require_once('Customer.php'); // Include the User class file
 
 session_start();
 
@@ -64,10 +64,5 @@ if(isset($_POST['Submit'])) {
         <button name="Submit" value="Login" class="button" type="submit">Sign in</button>
     </form>
 </div>
-
-<?php if ($logged_in) { ?>
-<?php } ?>
-
-
 </body>
 </html>
