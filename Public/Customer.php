@@ -79,5 +79,7 @@ class customer extends user {
         $this->DOB = $DOB;
     }
 
+
+
 }
 ?>
