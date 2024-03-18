@@ -1,4 +1,5 @@
 <?php
+global $connection;
 require_once('../config.php');
 require_once('../src/DBconnect.php');
 require_once('User.php');

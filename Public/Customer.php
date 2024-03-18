@@ -77,7 +77,7 @@ class customer extends user {
             $statement = $this->connection->prepare($query);
     
             // Execute the statement with the provided values
-            $statement->execute([$firstname, $lastname, $username, $hashedPassword, $age, $email, $contactno, $location]);
+            password_hash($password, PASSWORD_DEFAULT);            $statement->execute([$firstname, $lastname, $username, $hashedPassword, $age, $email, $contactno, $location]);
     
             return true; // Return true on successful registration
         } catch (PDOException $e) {
