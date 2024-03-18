@@ -1,19 +1,41 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require_once ('../config.php'); // This is where the username and
 require_once '../src/DBconnect.php';
 
 class User {
     private $connection;
-    public $username;
-    public $password;
 
     public function __construct($connection) {
         $this->connection = $connection;
     }
-    
+    private $firstname;
+    private $lastname;
+    private $username;
+    private $password;
+    private $age;
+    private $email;
+    private $contactno;
+    private $location;
+
+    // Setter and getter methods for first name
+    public function setFirstName($firstname) {
+        $this->firstname = $firstname;
+    }
+
+    public function getFirstName() {
+        return $this->firstname;
+    }
+
+    // Setter and getter methods for last name
+    public function setLastName($lastname) {
+        $this->lastname = $lastname;
+    }
+
+    public function getLastName() {
+        return $this->lastname;
+    }
+
+    // Setter and getter methods for username
     public function setUsername($username) {
         $this->username = $username;
     }
@@ -22,6 +44,7 @@ class User {
         return $this->username;
     }
 
+    // Setter and getter methods for password
     public function setPassword($password) {
         $this->password = $password;
     }

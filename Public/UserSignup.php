@@ -16,35 +16,27 @@ if (isset($_POST['submit'])) {
     // Create a new User object with the database connection
     $user = new User($connection);
 
-    // Get form data and set it to the user object
-    $user->setFirstName($_POST['firstname']);
-    $user->setLastName($_POST['lastname']);
-    $user->setUsername($_POST['username']);
-    $user->setPassword($_POST['password']);
-    $user->setAge($_POST['age']);
-    $user->setEmail($_POST['email']);
-    $user->setContactNo($_POST['contactno']);
-    $user->setLocation($_POST['location']);
+    // Get form data
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $age = $_POST['age'];
+    $email = $_POST['email'];
+    $contactno = $_POST['contactno'];
+    $location = $_POST['location'];
 
     //  register the user
     $result = $user->register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location);
-    // Attempt to register the user and pass the form data as arguments
-    $result = $user->register(
-        $_POST['firstname'],
-        $_POST['lastname'],
-        $_POST['username'],
-        $_POST['password'],
-        $_POST['age'],
-        $_POST['email'],
-        $_POST['contactno'],
-        $_POST['location']
-    );
+
     //  registration result
     if ($result === true) {
         // Redirect to login page after signup
         header("location: UserLogin.php");
         exit();
         // Attempt to authenticate the user after registration
+        $user->setUsername($username);
+        $user->setPassword($password);
         $authenticatedUser = $user->authenticate();
 
         if ($authenticatedUser) {
@@ -59,7 +51,7 @@ if (isset($_POST['submit'])) {
             $error = "Authentication failed after registration. Please try logging in manually.";
         }
     } else {
-        $error = $result; 
+        $error = $result;
     }
 }
 ?>
