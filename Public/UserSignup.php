@@ -1,4 +1,5 @@
 <?php
+
 global $connection;
 require_once('../config.php');
 require_once('../src/DBconnect.php');
@@ -6,48 +7,73 @@ require_once('User.php');
 require_once "Customer.php";
 require ('header.php');
 
+$error = "";
+
 if (isset($_POST['submit'])) {
-    // Include the database connection file
-    require_once '../src/DBconnect.php';
+    // Validate form data
+    $errors = validateFormData($_POST);
 
-    // Create a new User object with the database connection
-    //$user = new User($connection);
-    // Instantiate the 'customer' class
-    $customer = new customer($connection);
+    if (empty($errors)) {
+        // Include the database connection file
+        require_once '../src/DBconnect.php';
 
-    // Get form data and set it to the user object
-    $customer->setFirstName($_POST['firstname']);
-    $customer->setLastName($_POST['lastname']);
-    $customer->setUsername($_POST['username']);
-    $customer->setPassword($_POST['password']);
-    $customer->setAge($_POST['age']);
-    $customer->setEmail($_POST['email']);
-    $customer->setContactNo($_POST['contactno']);
-    $customer->setLocation($_POST['location']);
-    $customer->setDOB($_POST['DOB']);
+        // Instantiate the 'customer' class
+        $customer = new customer($connection);
 
-    // Attempt to register the user
-    $result = registerUser($customer);
+        // Set form data to the customer object
+        $customer->setFirstName($_POST['firstname']);
+        $customer->setLastName($_POST['lastname']);
+        $customer->setUsername($_POST['username']);
+        $customer->setPassword($_POST['password']);
+        $customer->setAge($_POST['age']);
+        $customer->setEmail($_POST['email']);
+        $customer->setContactNo($_POST['contactno']);
+        $customer->setLocation($_POST['location']);
+        $customer->setDOB($_POST['DOB']);
 
-    // Check registration result
-    if ($result === true) {
-        // Attempt to authenticate the user after registration
-        $authenticatedUser = authenticateUser($customer);
+        // Attempt to register the user
+        $result = registerUser($customer);
 
-        if ($authenticatedUser) {
-            session_start();
-            $_SESSION['UserID'] = $authenticatedUser['UserID'];
-            $_SESSION['Username'] = $authenticatedUser['username'];
-            $_SESSION['Active'] = true;
+        // Check registration result
+        if ($result === true) {
+            // Attempt to authenticate the user after registration
+            $authenticatedUser = authenticateUser($customer);
 
-            header("location:index.php");
-            exit();
+            if ($authenticatedUser) {
+                $_SESSION['UserID'] = $authenticatedUser['UserID'];
+                $_SESSION['Username'] = $authenticatedUser['username'];
+                $_SESSION['Active'] = true;
+
+                header("location:index.php");
+                exit();
+            } else {
+                $error = "Authentication failed after registration. Please try logging in manually.";
+            }
         } else {
-            $error = "Authentication failed after registration. Please try logging in manually.";
+            $error = $result;
         }
     } else {
-        $error = $result;
+        // Concatenate errors into a single message
+        $error = implode("<br>", $errors);
     }
+}
+
+// Function to validate form data
+function validateFormData($data) {
+    $errors = [];
+
+    // Perform validation for each form field
+    if (empty($data['firstname'])) {
+        $errors[] = "First name is required.";
+    }
+
+    if (empty($data['lastname'])) {
+        $errors[] = "Last name is required.";
+    }
+
+    // Add validation for other fields as needed
+
+    return $errors;
 }
 
 // Function to register a user
@@ -82,8 +108,7 @@ function registerUser($customer) {
 }
 
 // Function to authenticate a user
-function authenticateUser($customer)
-{
+function authenticateUser($customer) {
     try {
         // Query the database to retrieve user information
         $query = "SELECT * FROM user WHERE username = ?";
@@ -104,6 +129,7 @@ function authenticateUser($customer)
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
