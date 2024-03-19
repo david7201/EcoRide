@@ -1,4 +1,6 @@
-<?php session_start(); ?>
+<?php session_start(); 
+require_once('sessionactive.php');
+?>
 <style>
   body {
     font-family: 'Open Sans', sans-serif;

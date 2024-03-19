@@ -52,7 +52,7 @@
       <a href="UserSignup.php"><strong>Signup as User</strong></span> </a>
     </li>
     <li>
-      <a href="EmployeeLogin.php"><strong>Login as Employee</strong></a>
+      <a href="EmployeeLogin.php"><strong>Login as Driver</strong></a>
     </li>
     <li>
       <a href="AdminLogin.php"><strong>Login as Admin</strong></a>

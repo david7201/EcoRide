@@ -159,9 +159,8 @@ if (isset($_SESSION['username'])) {
     <div class="navbar-logo">Ecoride Plus</div>
     <ul>
       <li><a href="Index.php">Home</a></li>
-      <li><a href="#">Services</a></li>
+      <li><a href="services.php">Services</a></li>
       <li><a href="rentals.php">Rentals</a></li>
-      <li><a href="adminpage.php">Admin</a></li>
     </ul>
      <!-- Display welcome message -->
      

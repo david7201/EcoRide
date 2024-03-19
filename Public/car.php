@@ -9,8 +9,19 @@ class Car {
   public $fuelType;
   public $description;
   public $status;
+  public $amount;
   public $image;
-    
+
+
+        function set_amount($amount) {
+          $this->amount = $amount;
+        }
+        
+        function get_amount() {
+          return $this->amount;
+        }
+        
+          
     function set_image($image) {
       $this->image = $image;
     }

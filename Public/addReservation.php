@@ -1,124 +1,64 @@
 <?php
-require "header.php";
-require "Reservation.php";
+require_once "header.php";
+require_once "Reservation.php";
+
+// Function to generate a unique reservation number
+
 
 if (isset($_POST['submit'])) {
-    require "../common.php";
+    require_once "../src/DBconnect.php";
+    
     try {
-        require_once '../src/DBconnect.php';
-        $new_reservation = array(
-            "reservation" => escape($_POST['ReservationNumber']),
-            "userID" => escape($_POST['UserID']),
-            "carID" => escape($_POST['CarID']),
-            "date" => escape($_POST['DateAndTime']),
-            "total" => escape($_POST['TotalAmount']),
-            "status" => escape($_POST['IdentityVerificationStatus']),
-            "payment" => escape($_POST['PaymentStatus']),
-        );
+        $reservation = new Reservation();
+        // $reservation->setUserID($_POST['userID']);
+        $reservation->setCarID($_POST['carID']);
+        $reservation->setDate($_POST['date']);
+        $reservation->setTotal($_POST['total']);
+        
+        // Save reservation
+        $reservation->save($connection);
 
-        $sql = sprintf(
-            "INSERT INTO %s (%s) values (%s)",
-            "reservation",
-            implode(", ", array_keys($new_reservation)),
-            ":" . implode(", :", array_keys($new_reservation))
-        );
-
-        $statement = $connection->prepare($sql);
-        $statement->execute($new_reservation);
+        // Redirect to verification page
+        header("Location: verificationpage.php");
+        exit();
     } catch(PDOException $error) {
-        echo $sql . "<br>" . $error->getMessage();
+        echo "Error: " . $error->getMessage();
     }
 }
 
-if (isset($_POST['submit']) && $statement) {
-    echo "Reservation successfully added.";
-}
+
 ?>
 
-<style>
-    body {
-        font-family: 'Open Sans', sans-serif;
-        background-color: #E6EDEA;
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Reservation</title>
+    <style>
+        /* Your CSS styles here */
+    </style>
+</head>
+<body>
+    <h2>Make a Reservation</h2>
+    <form method="post">
+        <!-- Car ID field with value from URL parameter -->
+        <label for="carID">Car ID:</label>
+        <!-- <input type="hidden" name="userID" value="<?php // echo $_SESSION['userID']; ?>"> -->
 
-    form {
-        background: #C5E4CB;
-        max-width: 500px;
-        margin: 20px auto;
-        padding: 20px;
-        border-radius: 8px;
-    }
+        <input type="text" name="carID" id="carID" value="<?php echo $carID; ?>" >
 
-    label {
-        display: block;
-        margin: 15px 0 5px;
-    }
+        
+        <!-- Other reservation fields -->
+        <label for="date">Date:</label>
+        <input type="date" name="date" id="date" required>
+        
+        <label for="total">Total Days:</label>
+        <input type="number" name="total" id="total" required>
+        
+        <input type="submit" name="submit" value="Submit">
+    </form>
 
-    input[type=text],
-    input[type=submit],
-    textarea {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 20px;
-        border-radius: 4px;
-        border: 1px solid #a9c9a4;
-    }
-
-    textarea {
-        height: 100px;
-    }
-
-    input[type=submit] {
-        background-color: #A9C9A4;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
-
-    input[type=submit]:hover {
-        background-color: #97b498;
-    }
-
-    a {
-        display: block;
-        text-align: center;
-        margin-top: 20px;
-        color: #3B5249;
-        text-decoration: none;
-    }
-
-    a:hover {
-        color: #2F3E34;
-    }
-</style>
-
-<h2>Make a Reservation</h2>
-<form method="post">
-    <label for="reservation"> reservation</label>
-    <input type="number" name="reservation" id="reservation">
-
-    <label for="userID">userID</label>
-    <input type="number" name="userID" id="userID">
-
-    <label for="carID">carID</label>
-    <input type="number" name="carID" id="carID">
-
-    <label for="date">Date</label>
-    <input type="date" name="date" id="date">
-
-    <label for="total">Total</label>
-    <input type="text" name="total" id="total">
-
-    <label for="payment">Payment Status</label>
-    <input type="text" name="payment" id="payment">
-
-
-
-
-
-    <input type="submit" name="submit" value="Submit">
-</form>
-
-<a href="index.php">Back to Home</a>
-
-<?php include "footer.php"; ?>
+    <?php include "footer.php"; ?>
+</body>
+</html>

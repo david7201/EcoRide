@@ -25,7 +25,7 @@ if (isset($_POST['Submit'])) {
         $_SESSION['Username'] = $authenticatedEmployee['username'];
         $_SESSION['Active'] = true;
 
-        header("location:index.php");
+        header("location:driverint.php");
         exit();
     } else {
         $error = "Authentication failed after registration. Please try logging in manually.";

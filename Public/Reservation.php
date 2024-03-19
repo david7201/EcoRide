@@ -1,39 +1,42 @@
 <?php
+
 class Reservation {
-  public $id;
-  public $ReservationNumber;
-  public $userID;
-  public $CarID;
-  public $Date;
-  public $time;
+    private $userID;
+    private $carID;
+    private $date;
+    private $total;
 
-  function save($connection) {
-    $sql = "INSERT INTO reservations (fullname, email, phone, date, time, message) VALUES (:fullname, :email, :phone, :date, :time, :message)";
-    $statement = $connection->prepare($sql);
-    $statement->execute([
-        'fullname' => $this->fullname,
-        'email' => $this->email,
-        'phone' => $this->phone,
-        'date' => $this->date,
-        'time' => $this->time,
-    ]);
+    // Setter methods
+    public function setUserID($userID) {
+        $this->userID = $userID;
+    }
+
+    public function setCarID($carID) {
+        $this->carID = $carID;
+    }
+
+    public function setDate($date) {
+        $this->date = $date;
+    }
+
+    public function setTotal($total) {
+        $this->total = $total;
+    }
+    public function getTotal() {
+      return $this->total;
   }
-
-
-  function set_id($id) { $this->id = $id; }
-  function set_fullname($fullname) { $this->fullname = $fullname; }
-  function set_email($email) { $this->email = $email; }
-  function set_phone($phone) { $this->phone = $phone; }
-  function set_date($date) { $this->date = $date; }
-  function set_time($time) { $this->time = $time; }
-  function set_message($message) { $this->message = $message; }
-
-  function get_id() { return $this->id; }
-  function get_fullname() { return $this->fullname; }
-  function get_email() { return $this->email; }
-  function get_phone() { return $this->phone; }
-  function get_date() { return $this->date; }
-  function get_time() { return $this->time; }
-  function get_message() { return $this->message; }
+    // Save method to save the reservation data
+    public function save($connection) {
+      // Prepare the SQL statement
+      $sql = "INSERT INTO reservation (CarID, Pickup_Date, Total_Days) VALUES (?, ?, ?)";
+      
+      // Prepare the statement
+      $statement = $connection->prepare($sql);
+      
+      // Bind values to parameters and execute the statement
+      $statement->execute([$this->carID, $this->date, $this->total]);
+  }
+  
 }
+
 ?>

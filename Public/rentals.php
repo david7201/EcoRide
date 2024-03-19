@@ -1,7 +1,5 @@
-<?php 
-
-require "SessionActive.php"; 
-
+<?php
+require_once 'sessionactive.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,49 +8,38 @@ require "SessionActive.php";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Cars</title>
     <style>
-        /* Basic reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  .container {
+    max-width: 50%; /* Set the container width to 50% of the screen */
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(100px, 1fr)); /* Adjusted to fit five cars per row */
+    gap: 10px;
+}
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #3B5249;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
+.car {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    width: 500px; /* Set fixed width */
+    height: 600px; /* Set fixed height */
+}
 
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            overflow: hidden;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            grid-gap: 20px;
-        }
+.car h3 {
+    margin-bottom: 5px;
+    font-size: 14px; /* Increased font size slightly */
+}
 
-        .car {
-            background-color: #C5E4CB;
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 5px;
-        }
+.car img {
+    width: 100%;
+    max-width: 80px; /* Adjusted maximum width for smaller image */
+    height: auto;
+    margin-bottom: 5px;
+}
 
-        .car h3 {
-            margin-bottom: 10px;
-        }
 
-        .car p {
-            margin-bottom: 5px;
-        }
-        img{
-            width: 200px;
-            height: 150px;
-        }
+
     </style>
 </head>
 <body>
@@ -63,16 +50,15 @@ require_once '../src/DBconnect.php';
 require_once 'car.php'; 
 
 try {
+    // Fetch all cars from the database
     $sql = "SELECT * FROM car"; 
     $statement = $connection->prepare($sql);
     $statement->execute();
 
-    //fetches
-
     $cars = [];
     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
         $car = new Car();
-        // Using setter methods to populate the properties
+        // Populate car object properties
         $car->set_id($row["Carid"]);
         $car->set_brand($row["Brand"]);
         $car->set_model($row["Model"]);
@@ -81,6 +67,7 @@ try {
         $car->set_seats($row["Seats"]);
         $car->set_fuelType($row["FuelType"]);
         $car->set_description($row["Description"]);
+        $car->set_amount($row["amount"]); // Set the amount property
         $car->set_image($row["image"]);
         $cars[] = $car;
     }
@@ -91,13 +78,14 @@ try {
 // Include header file
 require "header.php";
 
-// Check if any cars were found
+// Display cars if found
 if ($cars && count($cars) > 0) {
     ?>
     <h2>All Cars</h2>
     <div class="container">
         <?php foreach ($cars as $car) { ?>
             <div class="car">
+                <!-- Display car information -->
                 <h3><?php echo escape($car->get_brand()); ?> <?php echo escape($car->get_model()); ?></h3>
                 <p><strong>ID:</strong> <?php echo escape($car->get_id()); ?></p>
                 <p><strong>Body Type:</strong> <?php echo escape($car->get_bodyType()); ?></p>
@@ -105,17 +93,23 @@ if ($cars && count($cars) > 0) {
                 <p><strong>Seats:</strong> <?php echo escape($car->get_seats()); ?></p>
                 <p><strong>Fuel Type:</strong> <?php echo escape($car->get_fuelType()); ?></p>
                 <p><strong>Description:</strong> <?php echo escape($car->get_description()); ?></p>
-                <!----<?php if ($car->get_image()) { ?> --->
-            <img src="<?php echo escape($car->get_image()); ?>" alt="Car Image">
-        <?php } ?>
+                <p><strong>Amount:</strong> $<?php echo escape($car->get_amount()); ?></p> <!-- Display the amount -->
+                <?php if ($car->get_image()) { ?>
+                    <img src="<?php echo escape($car->get_image()); ?>" alt="Car Image">
+                <?php } ?>
+                <!-- Reservation form -->
+                <form action="addreservation.php" method="post">
+    <input type="id" name="carid" value="0">
+    <button type="submit">Reserve</button>
+</form>
 
             </div>
         <?php } ?>
     </div>
-    <?php 
+<?php 
 } else { ?>
     <p>No cars found.</p>
-    <?php
+<?php
 }
 
 // Include footer file
