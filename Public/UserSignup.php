@@ -82,7 +82,8 @@ function registerUser($customer) {
 }
 
 // Function to authenticate a user
-function authenticateUser($customer) {
+function authenticateUser($customer)
+{
     try {
         // Query the database to retrieve user information
         $query = "SELECT * FROM user WHERE username = ?";
@@ -102,4 +103,60 @@ function authenticateUser($customer) {
         return false;
     }
 }
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+</head>
+<body>
+
+<div class="container">
+    <h2>User Registration</h2>
+    <?php if(!empty($error)) { echo "<div class='error'>$error</div>"; } ?>
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <div class="form-group">
+            <label for="firstname">First Name:</label>
+            <input type="text" id="firstname" name="firstname" required>
+        </div>
+        <div class="form-group">
+            <label for="lastname">Last Name:</label>
+            <input type="text" id="lastname" name="lastname" required>
+        </div>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="contactno">Contact Number:</label>
+            <input type="text" id="contactno" name="contactno" required>
+        </div>
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
+        </div>
+        <div class="form-group">
+            <label for="DOB">D.O.B.:</label>
+            <input type="date" id="DOB" name="DOB" required>
+        </div>
+        <button type="submit" name="submit">Sign Up</button>
+    </form>
+</div>
+
+</body>
+</html>
 
