@@ -1,15 +1,17 @@
 <?php
 require_once('../config.php');
 require_once('../src/DBconnect.php');
-require_once 'customer.php';
+require_once 'Customer.php'; // Adjusted case sensitivity
 require ('header.php');
+
+$error = "";
 
 if (isset($_POST['submit'])) {
     // Include the database connection file
     require_once '../src/DBconnect.php';
 
     // Create a new User object with the database connection
-    $user = new customer($connection);
+    $user = new Customer($connection); // Adjusted class name case sensitivity
 
     // Get form data and set it to the user object
     $user->setFirstName($_POST['firstname']);
@@ -21,7 +23,7 @@ if (isset($_POST['submit'])) {
     $user->setContactNo($_POST['contactno']);
     $user->setLocation($_POST['location']);
 
-    //Attempt to register the user and pass the form data as arguments
+    // Attempt to register the user and pass the form data as arguments
     $result = $user->register(
         $_POST['firstname'],
         $_POST['lastname'],
@@ -36,10 +38,10 @@ if (isset($_POST['submit'])) {
     // Check registration result
     if ($result === true) {
         // Attempt to authenticate the user after registration
-        $authenticatedUser = $user->authenticate();
+        $authenticatedUser = $user->authenticate(); // Ensure the authenticate method is implemented correctly
 
         if ($authenticatedUser) {
-            session_start();
+            session_start(); // Start the session before setting session variables
             $_SESSION['UserID'] = $authenticatedUser['UserID'];
             $_SESSION['Username'] = $authenticatedUser['username'];
             $_SESSION['Active'] = true;
@@ -55,8 +57,14 @@ if (isset($_POST['submit'])) {
 }
 ?>
 
-
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+</head>
+<body>
 
 <div class="container">
     <h2>User Registration</h2>

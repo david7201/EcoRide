@@ -6,7 +6,7 @@
 $host = "localhost";
 $username = "root";
 $password = "pass";
-$dbname = "ecorides"; // will use later
+$dbname = "ecoride"; // will use later
 $dsn = "mysql:host=$host;dbname=$dbname"; // will use later
 $options = array(
  PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
