@@ -6,7 +6,7 @@ require_once ('../config.php'); // This is where the username and
 require_once '../src/DBconnect.php';
 
 class User {
-    private $connection;
+    protected $connection;
     public $username;
     public $password;
 
@@ -29,5 +29,7 @@ class User {
     public function getPassword() {
         return $this->password;
     }
+
+
 }
 ?>

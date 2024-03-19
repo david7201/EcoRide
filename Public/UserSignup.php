@@ -1,62 +1,153 @@
 <?php
+
+global $connection;
 require_once('../config.php');
 require_once('../src/DBconnect.php');
-require_once 'customer.php';
+require_once "Customer.php";
 require ('header.php');
 
+$error = "";
+
 if (isset($_POST['submit'])) {
-    // Include the database connection file
-    require_once '../src/DBconnect.php';
+    // Validate form data
+    $errors = validateFormData($_POST);
 
-    // Create a new User object with the database connection
-    $user = new customer($connection);
+    if (empty($errors)) {
+        // Include the database connection file
+        require_once '../src/DBconnect.php';
 
-    // Get form data and set it to the user object
-    $user->setFirstName($_POST['firstname']);
-    $user->setLastName($_POST['lastname']);
-    $user->setUsername($_POST['username']);
-    $user->setPassword($_POST['password']);
-    $user->setAge($_POST['age']);
-    $user->setEmail($_POST['email']);
-    $user->setContactNo($_POST['contactno']);
-    $user->setLocation($_POST['location']);
+        // Instantiate the 'customer' class
+        $customer = new customer($connection);
 
-    //Attempt to register the user and pass the form data as arguments
-    $result = $user->register(
-        $_POST['firstname'],
-        $_POST['lastname'],
-        $_POST['username'],
-        $_POST['password'],
-        $_POST['age'],
-        $_POST['email'],
-        $_POST['contactno'],
-        $_POST['location']
-    );
+        // Set form data to the customer object
+        $customer->setFirstName($_POST['firstname']);
+        $customer->setLastName($_POST['lastname']);
+        $customer->setUsername($_POST['username']);
+        $customer->setPassword($_POST['password']);
+        $customer->setAge($_POST['age']);
+        $customer->setEmail($_POST['email']);
+        $customer->setContactNo($_POST['contactno']);
+        $customer->setLocation($_POST['location']);
+        $customer->setDOB($_POST['DOB']);
 
-    // Check registration result
-    if ($result === true) {
-        // Attempt to authenticate the user after registration
-        $authenticatedUser = $user->authenticate();
+        // Attempt to register the user
+        $result = registerUser($customer);
 
-        if ($authenticatedUser) {
-            session_start();
-            $_SESSION['UserID'] = $authenticatedUser['UserID'];
-            $_SESSION['Username'] = $authenticatedUser['username'];
-            $_SESSION['Active'] = true;
+        $result = $customer->registerUser(
+            $_POST['firstname'],
+            $_POST['lastname'],
+            $_POST['username'],
+            $_POST['password'],
+            $_POST['age'],
+            $_POST['email'],
+            $_POST['contactno'],
+            $_POST['location']
+        );
 
-            header("location:index.php");
-            exit();
+        // Check registration result
+        if ($result === true) {
+            // Attempt to authenticate the user after registration
+            $authenticatedUser = authenticateUser($customer);
+
+            if ($authenticatedUser) {
+                $_SESSION['UserID'] = $authenticatedUser['UserID'];
+                $_SESSION['Username'] = $authenticatedUser['username'];
+                $_SESSION['Active'] = true;
+
+                header("location:index.php");
+                exit();
+            } else {
+                $error = "Authentication failed after registration. Please try logging in manually.";
+            }
         } else {
-            $error = "Authentication failed after registration. Please try logging in manually.";
+            $error = $result;
         }
     } else {
-        $error = $result; 
+        // Concatenate errors into a single message
+        $error = implode("<br>", $errors);
+    }
+}
+
+// Function to validate form data
+function validateFormData($data) {
+    $errors = [];
+
+    // Perform validation for each form field
+    if (empty($data['firstname'])) {
+        $errors[] = "First name is required.";
+    }
+
+    if (empty($data['lastname'])) {
+        $errors[] = "Last name is required.";
+    }
+
+    // Add validation for other fields as needed
+
+    return $errors;
+}
+
+// Function to register a user
+function registerUser($customer) {
+    try {
+        // Check if the email already exists in the database
+        $query = "SELECT COUNT(*) FROM user WHERE email = ?";
+        $statement = $customer->getConnection()->prepare($query);
+        $statement->execute([$customer->getEmail()]);
+        $count = $statement->fetchColumn();
+
+        if ($count > 0) {
+            // Redirect the user to the login page upon successful registration
+            header("location: login.php"); // Replace 'login.php' with the actual login page URL
+            exit();
+        }
+
+        // Prepare the SQL statement for user registration
+        $query = "INSERT INTO user (firstname, lastname, username, password, age, email, contactno, location, DOB) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $statement = $customer->getConnection()->prepare($query);
+
+        // Hash the password
+        $hashedPassword = password_hash($customer->getPassword(), PASSWORD_DEFAULT);
+
+        // Execute the statement with the provided values
+        $statement->execute([$customer->getFirstName(), $customer->getLastName(), $customer->getUsername(), $hashedPassword, $customer->getAge(), $customer->getEmail(), $customer->getContactNo(), $customer->getLocation(), $customer->getDOB()]);
+
+        return true; // Return true on successful registration
+    } catch (PDOException $e) {
+        return $e->getMessage(); // Return error message if an exception occurs
+    }
+}
+
+// Function to authenticate a user
+function authenticateUser($customer) {
+    try {
+        // Query the database to retrieve user information
+        $query = "SELECT * FROM user WHERE username = ?";
+        $statement = $customer->getConnection()->prepare($query);
+        $statement->execute([$customer->getUsername()]);
+        $customer = $statement->fetch(PDO::FETCH_ASSOC);
+
+        // Verify if the user exists and the password matches
+        if ($user && password_verify($customer->getPassword(), $customer['password'])) {
+            return $user; // Authentication successful
+        } else {
+            return false; // Authentication failed
+        }
+    } catch (PDOException $e) {
+        // Handle database connection or query errors
+        // Log or return an error message
+        return false;
     }
 }
 ?>
 
-
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+</head>
+<body>
 
 <div class="container">
     <h2>User Registration</h2>
@@ -94,9 +185,14 @@ if (isset($_POST['submit'])) {
             <label for="location">Location:</label>
             <input type="text" id="location" name="location" required>
         </div>
+        <div class="form-group">
+            <label for="DOB">D.O.B.:</label>
+            <input type="date" id="DOB" name="DOB" required>
+        </div>
         <button type="submit" name="submit">Sign Up</button>
     </form>
 </div>
 
 </body>
 </html>
+
