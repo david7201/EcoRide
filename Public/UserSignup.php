@@ -3,7 +3,6 @@
 global $connection;
 require_once('../config.php');
 require_once('../src/DBconnect.php');
-require_once('User.php');
 require_once "Customer.php";
 require ('header.php');
 
@@ -33,6 +32,17 @@ if (isset($_POST['submit'])) {
 
         // Attempt to register the user
         $result = registerUser($customer);
+
+        $result = $customer->registerUser(
+            $_POST['firstname'],
+            $_POST['lastname'],
+            $_POST['username'],
+            $_POST['password'],
+            $_POST['age'],
+            $_POST['email'],
+            $_POST['contactno'],
+            $_POST['location']
+        );
 
         // Check registration result
         if ($result === true) {
@@ -114,10 +124,10 @@ function authenticateUser($customer) {
         $query = "SELECT * FROM user WHERE username = ?";
         $statement = $customer->getConnection()->prepare($query);
         $statement->execute([$customer->getUsername()]);
-        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        $customer = $statement->fetch(PDO::FETCH_ASSOC);
 
         // Verify if the user exists and the password matches
-        if ($user && password_verify($customer->getPassword(), $user['password'])) {
+        if ($user && password_verify($customer->getPassword(), $customer['password'])) {
             return $user; // Authentication successful
         } else {
             return false; // Authentication failed

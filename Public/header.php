@@ -164,9 +164,13 @@ if (isset($_SESSION['username'])) {
       <li><a href="adminpage.php">Admin</a></li>
     </ul>
      <!-- Display welcome message -->
-     <h4><?php $welcome_message = "Logged In";
-         echo $welcome_message; ?></h4>
-     <?php if (isset($_SESSION['username'])) { ?>
+     
+     <h4><?php $welcome_message = "Logged In";?>
+     
+       <?php  echo $welcome_message; ?></h4>
+       
+       <?php if (isset($_SESSION['username'])) { ?>
+     
          <!-- If the User is logged in -->
          <!-- Add user-specific content here -->
          <button onclick="location.href='logout.php'">Logout</button>

@@ -1,89 +1,34 @@
 <?php
-global $connection, $sql;
-require "header.php";
+require_once('../config.php');
+require_once('../src/DBconnect.php');
+require_once('Employee.php'); // Include the Employee class file
+require_once('header.php');
+
+session_start();
 
 if (isset($_POST['submit'])) {
-    require "../common.php";
     try {
-        require_once '../src/DBconnect.php';
-        $new_user = array(
-            "firstname" => escape($_POST['firstname']),
-            "lastname" => escape($_POST['lastname']),
-            "username" => escape($_POST['username']), 
-            "email" => escape($_POST['email']),
-            "age" => escape($_POST['age']),
-            "location" => escape($_POST['location'])
-        );
+        $employee = new Employee($connection);
+        $employee->setFirstName($_POST['firstname']);
+        $employee->setLastName($_POST['lastname']);
+        $employee->setUsername($_POST['username']);
+        $employee->setPassword($_POST['password']); // Set the password
+        $employee->setAge($_POST['age']);
+        $employee->setEmail($_POST['email']);
+        $employee->setContactNo($_POST['contactno']); // Set the contact number
+        $employee->setLocation($_POST['location']);
 
-        $sql = sprintf(
-            "INSERT INTO %s (%s) values (%s)",
-            "employee",
-            implode(", ", array_keys($new_user)),
-            ":" . implode(", :", array_keys($new_user))
-        );
+        $employee->insertEmployee(); // Method to insert employee into the database
 
-        $statement = $connection->prepare($sql);
-        $statement->execute($new_user);
+        echo ($_POST['firstname']) . ' successfully added.';
     } catch(PDOException $error) {
-        echo $sql . "<br>" . $error->getMessage();
+        echo $error->getMessage();
     }
-}
-
-if (isset($_POST['submit']) && $statement) {
-    echo escape($_POST['firstname']) . ' successfully added.';
 }
 ?>
 
 <style>
-body {
-    font-family: 'Open Sans', sans-serif;
-    background-color: #E6EDEA;
-}
-
-form {
-    background: #C5E4CB;
-    max-width: 500px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 8px;
-}
-
-label {
-    display: block;
-    margin: 15px 0 5px;
-}
-
-input[type=text],
-input[type=submit] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    border: 1px solid #a9c9a4;
-}
-
-input[type=submit] {
-    background-color: #A9C9A4;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-input[type=submit]:hover {
-    background-color: #97b498;
-}
-
-a {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    color: #3B5249;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #2F3E34;
-}
+/* Your CSS styles */
 </style>
 
 <h2>Add Employee</h2>
@@ -97,11 +42,17 @@ a:hover {
     <label for="username">Username</label>
     <input type="text" name="username" id="username"> 
     
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password"> <!-- Add password field -->
+    
     <label for="email">Email Address</label>
     <input type="text" name="email" id="email">
     
     <label for="age">Age</label>
     <input type="text" name="age" id="age">
+    
+    <label for="contactno">Contact Number</label>
+    <input type="text" name="contactno" id="contactno"> <!-- Add contact number field -->
     
     <label for="location">Location</label>
     <input type="text" name="location" id="location">
@@ -111,4 +62,4 @@ a:hover {
 
 <a href="Admin.php">Back to home</a>
 
-<?php include "footer.php"; ?>
+<?php require_once('footer.php'); ?>
