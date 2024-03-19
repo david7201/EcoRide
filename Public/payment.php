@@ -1,6 +1,5 @@
 <?php
 require_once('sessionactive.php');
-
 require_once '../src/DBconnect.php';
 require_once 'car.php'; // Include the Car class
 require_once 'verification.php'; // Include the VerificationProcessor class

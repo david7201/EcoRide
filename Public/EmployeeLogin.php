@@ -1,10 +1,10 @@
 <?php
+session_start();
 require_once('../config.php');
 require_once('../src/DBconnect.php');
 require_once('Employee.php'); // Include the Employee class file
 require ('header.php');
 
-session_start();
 
 if (isset($_POST['Submit'])) {
     $username = $_POST['Username'];

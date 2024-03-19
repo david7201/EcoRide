@@ -49,7 +49,7 @@
       <a href="CancelBooking.php"><strong>Cancel a reservation</strong></a>
     </li>
     <li>
-      <a href="breakdown.php"><strong>Contact us for breakdown</strong></span> </a>
+      <a href="breakdownform.php"><strong>Contact us for breakdown</strong></span> </a>
     </li>
   </ul>
   <?php if (isset($_SESSION['Username'])) : ?>

@@ -5,7 +5,7 @@ require_once('Customer.php'); // Include the Customer class file
 require ('header.php');
 
 
-session_start();
+
 
 if (isset($_POST['Submit'])) {
     $username = $_POST['Username'];
@@ -47,6 +47,76 @@ else {
     <link rel="stylesheet" type="text/css" href="../css/signin.css">
     <link rel="stylesheet" type="text/css" href="../css/stylesheet.css">
     <title>Sign in</title>
+
+    <style>
+        /* General styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.form-signin {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-signin h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-signin label {
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.checkbox {
+    margin-bottom: 20px;
+}
+
+.checkbox label {
+    font-weight: normal;
+}
+
+.button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: #ff0000;
+    margin-bottom: 20px;
+}
+
+    </style>
 </head>
 <body>
 <div class="container">

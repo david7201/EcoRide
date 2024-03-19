@@ -1,29 +1,48 @@
+
 <?php
-require_once('sessionactive.php');
+require_once "../src/DBconnect.php";
 
-require_once "header.php";
-require_once "Reservation.php"; // Assuming Reservation.php contains the Reservation class definition
-require_once "../src/DBconnect.php"; // Assuming DatabaseDriver.php contains the database operations
+class ReservationProcessor {
+    private $connection;
+    private $reservation_number;
 
-// Assuming $connection is your database connection
-$databaseDriver = new reservation($connection);
+    public function __construct($connection) {
+        $this->connection = $connection;
+    }
+
+    public function setReservationNumber($reservation_number) {
+        $this->reservation_number = $reservation_number;
+    }
+
+    public function deleteReservation() {
+        try {
+            $sql = "DELETE FROM reservation WHERE reservationID = :reservationID"; // Adjusted column name
+            $statement = $this->connection->prepare($sql);
+            $statement->bindValue(':reservationID', $this->reservation_number);
+            $statement->execute();
+
+            if ($statement->rowCount() > 0) {
+                echo "Reservation with ID $this->reservation_number has been deleted successfully.";
+            } else {
+                echo "No reservation found with ID $this->reservation_number.";
+            }
+        } catch(PDOException $error) {
+            echo "Error deleting reservation: " . $error->getMessage();
+        }
+    }
+}
+
+// Create an instance of ReservationProcessor with the database connection
+$reservationProcessor = new ReservationProcessor($connection);
 
 // Check if reservation ID is provided via POST request
-if(isset($_POST['delete_reservation_id'])) {
-    $reservationId = $_POST['delete_reservation_id'];
-
-    // Create an instance of the Reservation class
-    $reservation = new Reservation();
-    $reservation->setId($reservationId);
-
-    // Call the deleteReservation method from the DatabaseDriver class
-    $databaseDriver->deleteReservation($reservation);
-
-    // Provide feedback to the user
-    echo "Reservation with ID $reservationId deleted successfully.";
-} else {
-    echo "Reservation ID not provided.";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $reservationProcessor->setReservationNumber($_POST['delete_reservation_id']);
+    $reservationProcessor->deleteReservation();
 }
+
+// Include header template
+require "header.php";
 ?>
 
 <!DOCTYPE html>
@@ -34,12 +53,12 @@ if(isset($_POST['delete_reservation_id'])) {
     <title>Delete Reservation</title>
 </head>
 <body>
-<h2>Delete Reservation</h2>
-<form action="deletereservation.php" method="post">
-    <label for="delete_reservation_id">Reservation ID:</label>
-    <input type="text" id="delete_reservation_id" name="delete_reservation_id" required>
-    <button type="submit">Delete Reservation</button>
-</form>
+    <h2>Delete Reservation</h2>
+    <form action="driverint.php" method="post">
+        <label for="delete_reservation_id">Reservation ID:</label>
+        <input type="text" id="delete_reservation_id" name="delete_reservation_id" required>
+        <button type="submit">Delete Reservation</button>
+    </form>
 </body>
 </html>
 

@@ -1,9 +1,8 @@
 <?php
-require_once('sessionactive.php');
+require_once '../src/DBconnect.php';
+require_once ('../config.php');
 
-require_once 'Employee.php'; // Include Employee class
-
-class BreakdownTowingProcessor {
+class breakdown {
     private $conn;
     private $name;
     private $email;
@@ -42,7 +41,6 @@ class BreakdownTowingProcessor {
             $sql = "INSERT INTO breakdowntowing (name, email, message) VALUES (:name, :email, :message)";
             $stmt = $this->conn->prepare($sql);
 
-            // Set parameters and execute the statement
             $params = [
                 ':name' => $this->name,
                 ':email' => $this->email,
@@ -55,17 +53,14 @@ class BreakdownTowingProcessor {
                 echo "Error: " . $sql . "<br>" . $this->conn->error;
             }
 
-            $stmt->closeCursor(); // Close cursor to release resources
+            $stmt->closeCursor(); 
         } catch (PDOException $error) {
             echo "Error inserting data: " . $error->getMessage();
         }
     }
 
-    // Method to aggregate data from both Employee and BreakdownTowingProcessor
     public function aggregateData($employee) {
-        // Assuming $employee is an instance of Employee
 
-        // Get employee data
         $employeeData = [
             'firstname' => $employee->getFirstName(),
             'lastname' => $employee->getLastName(),
@@ -75,14 +70,12 @@ class BreakdownTowingProcessor {
             'location' => $employee->getLocation()
         ];
 
-        // Get breakdown towing data
         $breakdownTowingData = [
             'name' => $this->name,
             'email' => $this->email,
             'message' => $this->message
         ];
 
-        // Aggregate data
         $aggregatedData = [
             'employee' => $employeeData,
             'breakdown_towing' => $breakdownTowingData
