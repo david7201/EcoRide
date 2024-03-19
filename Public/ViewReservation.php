@@ -42,10 +42,9 @@ require_once 'sessionactive.php';
 <?php
 require "../common.php";
 require_once '../src/DBconnect.php';
-require_once 'reservation.php'; // Include the Reservation class
+require_once 'reservation.php'; 
 
 try {
-    // Fetch all reservations from the database
     $sql = "SELECT * FROM reservation";
     $statement = $connection->prepare($sql);
     $statement->execute();
@@ -63,7 +62,6 @@ try {
     echo $sql . "<br>" . $error->getMessage();
 }
 
-// Display reservations if found
 if ($reservations && count($reservations) > 0) {
     ?>
     <h2>All Reservations</h2>
@@ -84,7 +82,6 @@ if ($reservations && count($reservations) > 0) {
 <?php
 }
 
-// Include footer file
 require "footer.php";
 ?>
 

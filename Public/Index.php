@@ -2,7 +2,6 @@
 require_once "header.php";
 require_once 'DBconnect.php';
 
-// Check if the user is logged in
 if (isset($_SESSION['Username'])) {
     $username = $_SESSION['Username'];
     $welcome_message = "Welcome, $username";

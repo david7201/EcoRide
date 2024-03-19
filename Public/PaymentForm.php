@@ -35,15 +35,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <h2>Payment Form</h2>
     <form id="paymentForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <!-- Prompt user to enter the number of days -->
         <label for="reservation_days">Enter Number of Days for Reservation:</label><br>
         <input type="number" id="reservation_days" name="reservation_days" required oninput="updateTotalAmount()"><br>
 
-        <!-- Display the calculated total amount -->
         <label for="total_amount">Total Amount:</label><br>
         <input type="text" id="total_amount" name="total_amount" value="0" readonly><br>
 
-        <!-- Rest of the form fields -->
         <label for="payment_date">Payment Date:</label><br>
         <input type="date" id="payment_date" name="payment_date" required><br>
 
@@ -52,7 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="">Select Payment Method</option>
             <option value="credit_card">Credit Card</option>
             <option value="debit_card">Debit Card</option>
-            <!-- Add more options for payment methods if needed -->
         </select><br>
 
         <label for="card_number">Card Number:</label><br>
@@ -75,13 +71,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script>
         function updateTotalAmount() {
-            // Retrieve the number of days for reservation from the input field
             var reservationDays = document.getElementById("reservation_days").value;
             
-            // Calculate the total amount based on the rate per day (80) and the number of days
             var totalAmount = 80 * reservationDays;
             
-            // Update the value of the total amount input field
             document.getElementById("total_amount").value = totalAmount;
         }
     </script>

@@ -27,22 +27,16 @@ class Reservation {
         $this->total = $total;
     }
 
-    // Getter method for reservation ID
     public function getReservationID() {
         return $this->reservationID;
     }
 
-    // Save method to save the reservation data
     public function save($connection) {
         try {
-            // Prepare the SQL statement
             $sql = "INSERT INTO reservation (ReservationID, UserID, CarID, Pickup_Date, Total_Days) VALUES (?, ?, ?, ?, ?)";
-            // Prepare the statement
             $statement = $connection->prepare($sql);
-            // Bind values to parameters and execute the statement
             $statement->execute([$this->reservationID, $this->userID, $this->carID, $this->date, $this->total]);
         } catch(PDOException $error) {
-            // Handle any errors that occur during the execution of the query
             echo "Error saving reservation: " . $error->getMessage();
         }
     }

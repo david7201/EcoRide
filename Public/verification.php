@@ -45,7 +45,7 @@ class Verification {
             if ($stmt->execute($params)) {
                 echo "Data inserted successfully!";
             } else {
-                echo "Error: " . $stmt->errorInfo()[2]; // Display error message
+                echo "Error: " . $stmt->errorInfo()[2]; 
             }
 
             $stmt->closeCursor();

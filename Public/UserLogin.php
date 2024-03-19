@@ -1,7 +1,7 @@
 <?php
 require_once('../config.php');
 require_once('../src/DBconnect.php');
-require_once('Customer.php'); // Include the Customer class file
+require_once('Customer.php'); 
 require ('header.php');
 
 
@@ -11,13 +11,10 @@ if (isset($_POST['Submit'])) {
     $username = $_POST['Username'];
     $password = $_POST['Password'];
 
-    // Create an instance of the Customer class
     $customer = new Customer($connection);
 
-    // Set username using setters
     $customer->setUsername($username);
 
-    // Retrieve user record from the database
     $authenticatedUser = $customer->authenticate();
 
         if ($authenticatedUser) {
@@ -49,7 +46,6 @@ else {
     <title>Sign in</title>
 
     <style>
-        /* General styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;

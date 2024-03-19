@@ -9,10 +9,10 @@ require_once 'sessionactive.php';
     <title>All Cars</title>
     <style>
   .container {
-    max-width: 50%; /* Set the container width to 50% of the screen */
+    max-width: 50%;
     margin: auto;
     display: grid;
-    grid-template-columns: repeat(5, minmax(100px, 1fr)); /* Adjusted to fit five cars per row */
+    grid-template-columns: repeat(5, minmax(100px, 1fr)); 
     gap: 10px;
 }
 
@@ -22,18 +22,18 @@ require_once 'sessionactive.php';
     border-radius: 5px;
     padding: 10px;
     text-align: center;
-    width: 500px; /* Set fixed width */
-    height: 600px; /* Set fixed height */
+    width: 500px; 
+    height: 600px; 
 }
 
 .car h3 {
     margin-bottom: 5px;
-    font-size: 14px; /* Increased font size slightly */
+    font-size: 14px; 
 }
 
 .car img {
     width: 100%;
-    max-width: 80px; /* Adjusted maximum width for smaller image */
+    max-width: 80px; 
     height: auto;
     margin-bottom: 5px;
 }
@@ -50,7 +50,6 @@ require_once '../src/DBconnect.php';
 require_once 'car.php'; 
 
 try {
-    // Fetch all cars from the database
     $sql = "SELECT * FROM car"; 
     $statement = $connection->prepare($sql);
     $statement->execute();
@@ -58,7 +57,6 @@ try {
     $cars = [];
     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
         $car = new Car();
-        // Populate car object properties
         $car->set_id($row["Carid"]);
         $car->set_brand($row["Brand"]);
         $car->set_model($row["Model"]);
@@ -67,7 +65,7 @@ try {
         $car->set_seats($row["Seats"]);
         $car->set_fuelType($row["FuelType"]);
         $car->set_description($row["Description"]);
-        $car->set_amount($row["amount"]); // Set the amount property
+        $car->set_amount($row["amount"]); 
         $car->set_image($row["image"]);
         $cars[] = $car;
     }
@@ -75,17 +73,14 @@ try {
     echo $sql . "<br>" . $error->getMessage();
 }
 
-// Include header file
 require "header.php";
 
-// Display cars if found
 if ($cars && count($cars) > 0) {
     ?>
     <h2>All Cars</h2>
     <div class="container">
         <?php foreach ($cars as $car) { ?>
             <div class="car">
-                <!-- Display car information -->
                 <h3><?php echo escape($car->get_brand()); ?> <?php echo escape($car->get_model()); ?></h3>
                 <p><strong>ID:</strong> <?php echo escape($car->get_id()); ?></p>
                 <p><strong>Body Type:</strong> <?php echo escape($car->get_bodyType()); ?></p>
@@ -97,7 +92,6 @@ if ($cars && count($cars) > 0) {
                 <?php if ($car->get_image()) { ?>
                     <img src="<?php echo escape($car->get_image()); ?>" alt="Car Image">
                 <?php } ?>
-                <!-- Reservation form -->
                 <form action="addreservation.php" method="post">
     <input type="id" name="carid" value="0">
     <button type="submit">Reserve</button>
@@ -112,7 +106,6 @@ if ($cars && count($cars) > 0) {
 <?php
 }
 
-// Include footer file
 require "footer.php";
 ?>
 

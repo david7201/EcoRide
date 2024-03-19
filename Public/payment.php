@@ -1,9 +1,9 @@
 <?php
 require_once('sessionactive.php');
 require_once '../src/DBconnect.php';
-require_once 'car.php'; // Include the Car class
-require_once 'verification.php'; // Include the VerificationProcessor class
-require_once 'reservation.php'; // Include the Reservation class
+require_once 'car.php'; 
+require_once 'verification.php'; 
+require_once 'reservation.php'; 
 
 class Payment {
     private $conn;
@@ -21,9 +21,9 @@ class Payment {
 
     public function __construct($connection) {
         $this->conn = $connection;
-        $this->car = new Car(); // Create an instance of the Car class
+        $this->car = new Car(); 
         $this->verification = new Verification($connection);
-        $this->reservation = new Reservation(); // Create an instance of the Reservation class
+        $this->reservation = new Reservation(); 
     }
     public function getTotalDays() {
         return $this->reservation->getTotal();
@@ -63,10 +63,8 @@ class Payment {
 
     public function insertPayment() {
         try {
-            // Calculate total amount based on car rental days
             $totalAmount = $this->amount * $this->reservation->getTotal();
             
-            // Insert payment data
             $sql = "INSERT INTO Payment (amount, payment_date, payment_method, card_number, name_on_card, cvv, expiration_date, status) VALUES (:amount, :payment_date, :payment_method, :card_number, :name_on_card, :cvv, :expiration_date, :status)";
             $stmt = $this->conn->prepare($sql);
 

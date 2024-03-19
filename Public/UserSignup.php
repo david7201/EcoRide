@@ -1,19 +1,16 @@
 <?php
 require_once('../config.php');
 require_once('../src/DBconnect.php');
-require_once 'Customer.php'; // Adjusted case sensitivity
+require_once 'Customer.php'; 
 require ('header.php');
 
 $error = "";
 
 if (isset($_POST['submit'])) {
-    // Include the database connection file
     require_once '../src/DBconnect.php';
 
-    // Create a new User object with the database connection
-    $user = new Customer($connection); // Adjusted class name case sensitivity
+    $user = new Customer($connection); 
 
-    // Get form data and set it to the user object
     $user->setFirstName($_POST['firstname']);
     $user->setLastName($_POST['lastname']);
     $user->setUsername($_POST['username']);
@@ -23,7 +20,6 @@ if (isset($_POST['submit'])) {
     $user->setContactNo($_POST['contactno']);
     $user->setLocation($_POST['location']);
 
-    // Attempt to register the user and pass the form data as arguments
     $result = $user->register(
         $_POST['firstname'],
         $_POST['lastname'],
@@ -35,13 +31,11 @@ if (isset($_POST['submit'])) {
         $_POST['location']
     );
 
-    // Check registration result
     if ($result === true) {
-        // Attempt to authenticate the user after registration
-        $authenticatedUser = $user->authenticate(); // Ensure the authenticate method is implemented correctly
+        $authenticatedUser = $user->authenticate(); 
 
         if ($authenticatedUser) {
-            session_start(); // Start the session before setting session variables
+            session_start(); 
             $_SESSION['UserID'] = $authenticatedUser['UserID'];
             $_SESSION['Username'] = $authenticatedUser['username'];
             $_SESSION['Active'] = true;
@@ -64,7 +58,6 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration</title>
     <style>
-        /* General styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -84,7 +77,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Form styles */
 .form-group {
     margin-bottom: 20px;
 }

@@ -1,9 +1,7 @@
 <?php
-// Start the session
 // session_start();
 
-// Check if the user is logged in
-if (isset($_SESSION['username'])) {
+]if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
     $welcome_message = "Welcome, $username";
 } else {
@@ -163,17 +161,13 @@ if (isset($_SESSION['username'])) {
       <li><a href="services.php">Services</a></li>
       <li><a href="rentals.php">Rentals</a></li>
     </ul>
-     <!-- Display welcome message -->
      
     
        
        <?php if (isset($_SESSION['username'])) { ?>
      
-         <!-- If the User is logged in -->
-         <!-- Add user-specific content here -->
          <button onclick="location.href='logout.php'">Logout</button>
      <?php } else { ?>
-         <!-- If the User is not logged in -->
          <button class="login-register-btn"><a href="ChooseLogin.php">Login / Register</a></button>
 
      <?php } ?>
