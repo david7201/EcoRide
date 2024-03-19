@@ -1,6 +1,7 @@
 <?php
 // Start the session
 session_start();
+
 // Check if the user is logged in
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
@@ -164,9 +165,7 @@ if (isset($_SESSION['username'])) {
     </ul>
      <!-- Display welcome message -->
      
-     <h4><?php $welcome_message = "Logged In";?>
-     
-       <?php  echo $welcome_message; ?></h4>
+    
        
        <?php if (isset($_SESSION['username'])) { ?>
      

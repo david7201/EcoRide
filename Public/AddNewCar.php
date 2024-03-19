@@ -1,5 +1,7 @@
 <?php
 global $connection;
+require_once('sessionactive.php');
+
 require "header.php";
 require "car.php"; // Ensure this path is correct
 require "../src/DBconnect.php"; // Database connection

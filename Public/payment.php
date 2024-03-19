@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+require_once('sessionactive.php');
 
 require_once '../src/DBconnect.php';
 require_once 'car.php'; // Include the Car class

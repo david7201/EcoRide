@@ -1,4 +1,6 @@
 <?php
+require_once('sessionactive.php');
+
 require_once '../src/DBconnect.php';
 
 class Verification {

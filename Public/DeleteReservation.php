@@ -1,4 +1,6 @@
 <?php
+require_once('sessionactive.php');
+
 require_once "header.php";
 require_once "Reservation.php"; // Assuming Reservation.php contains the Reservation class definition
 require_once "../src/DBconnect.php"; // Assuming DatabaseDriver.php contains the database operations

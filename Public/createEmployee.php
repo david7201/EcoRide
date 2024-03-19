@@ -1,4 +1,6 @@
 <?php
+require_once('sessionactive.php');
+
 require_once('../config.php');
 require_once('../src/DBconnect.php');
 require_once('Employee.php'); // Include the Employee class file

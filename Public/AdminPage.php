@@ -53,14 +53,9 @@ require_once('sessionactive.php');
       <a href="AddNewCar.php"><strong>Add cars</strong></span> </a>
     </li>
     <li>
-      <a href="read.php"><strong>View</strong></a>
+      <a href="read.php"><strong>View customers</strong></a>
     </li>
-    <li>
-      <a href="update.php"><strong>Update</strong><span>- edit a user</span></a>
-    </li>
-    <li>
-      <a href="delete.php"><strong>Delete</strong> <span>- delete a user</span></a>
-    </li>
+    
   
   </ul>
   <?php if (isset($_SESSION['Username'])) : ?>

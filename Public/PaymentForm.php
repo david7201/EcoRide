@@ -1,4 +1,6 @@
 <?php
+require_once('sessionactive.php');
+
 require_once 'payment.php';
 require_once 'header.php';
 

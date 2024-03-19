@@ -1,4 +1,6 @@
 <?php
+require_once('sessionactive.php');
+
 require_once 'verification.php'; // Include the VerificationProcessor class
 require "header.php";
 $verificationProcessor = new verification($connection);
