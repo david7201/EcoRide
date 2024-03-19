@@ -26,25 +26,13 @@ if (isset($_POST['submit'])) {
     $customer->setLocation($_POST['location']);
     $customer->setDOB($_POST['DOB']);
 
-
-    // Attempt to register the user and pass the form data as arguments
-    $result = $customer->register(
-        $_POST['firstname'],
-        $_POST['lastname'],
-        $_POST['username'],
-        $_POST['password'],
-        $_POST['age'],
-        $_POST['email'],
-        $_POST['contactno'],
-        $_POST['location'],
-        $_POST['DOB']
-
-    );
+    // Attempt to register the user
+    $result = registerUser($customer);
 
     // Check registration result
     if ($result === true) {
         // Attempt to authenticate the user after registration
-        $authenticatedUser = $customer->authenticate();
+        $authenticatedUser = authenticateUser($customer);
 
         if ($authenticatedUser) {
             session_start();
@@ -58,57 +46,60 @@ if (isset($_POST['submit'])) {
             $error = "Authentication failed after registration. Please try logging in manually.";
         }
     } else {
-        $error = $result; 
+        $error = $result;
     }
 }
-?>
 
+// Function to register a user
+function registerUser($customer) {
+    try {
+        // Check if the email already exists in the database
+        $query = "SELECT COUNT(*) FROM user WHERE email = ?";
+        $statement = $customer->getConnection()->prepare($query);
+        $statement->execute([$customer->getEmail()]);
+        $count = $statement->fetchColumn();
 
+        if ($count > 0) {
+            // Redirect the user to the login page upon successful registration
+            header("location: login.php"); // Replace 'login.php' with the actual login page URL
+            exit();
+        }
 
+        // Prepare the SQL statement for user registration
+        $query = "INSERT INTO user (firstname, lastname, username, password, age, email, contactno, location, DOB) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $statement = $customer->getConnection()->prepare($query);
 
-<div class="container">
-    <h2>User Registration</h2>
-    <?php if(!empty($error)) { echo "<div class='error'>$error</div>"; } ?>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-        <div class="form-group">
-            <label for="firstname">First Name:</label>
-            <input type="text" id="firstname" name="firstname" required>
-        </div>
-        <div class="form-group">
-            <label for="lastname">Last Name:</label>
-            <input type="text" id="lastname" name="lastname" required>
-        </div>
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div class="form-group">
-            <label for="age">Age:</label>
-            <input type="number" id="age" name="age" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="contactno">Contact Number:</label>
-            <input type="text" id="contactno" name="contactno" required>
-        </div>
-        <div class="form-group">
-            <label for="location">Location:</label>
-            <input type="text" id="location" name="location" required>
-        </div>
-        <div class="form-group">
-            <label for="DOB">D.O.B.:</label>
-            <input type="date" id="DOB" name="DOB" required>
-        </div>
-        <button type="submit" name="submit">Sign Up</button>
-    </form>
-</div>
+        // Hash the password
+        $hashedPassword = password_hash($customer->getPassword(), PASSWORD_DEFAULT);
 
-</body>
-</html>
+        // Execute the statement with the provided values
+        $statement->execute([$customer->getFirstName(), $customer->getLastName(), $customer->getUsername(), $hashedPassword, $customer->getAge(), $customer->getEmail(), $customer->getContactNo(), $customer->getLocation(), $customer->getDOB()]);
+
+        return true; // Return true on successful registration
+    } catch (PDOException $e) {
+        return $e->getMessage(); // Return error message if an exception occurs
+    }
+}
+
+// Function to authenticate a user
+function authenticateUser($customer) {
+    try {
+        // Query the database to retrieve user information
+        $query = "SELECT * FROM user WHERE username = ?";
+        $statement = $customer->getConnection()->prepare($query);
+        $statement->execute([$customer->getUsername()]);
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+
+        // Verify if the user exists and the password matches
+        if ($user && password_verify($customer->getPassword(), $user['password'])) {
+            return $user; // Authentication successful
+        } else {
+            return false; // Authentication failed
+        }
+    } catch (PDOException $e) {
+        // Handle database connection or query errors
+        // Log or return an error message
+        return false;
+    }
+}
+

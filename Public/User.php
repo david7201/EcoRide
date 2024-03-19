@@ -30,8 +30,6 @@ class User {
         return $this->password;
     }
 
-    public function authenticate()
-    {
-    }
+
 }
 ?>
