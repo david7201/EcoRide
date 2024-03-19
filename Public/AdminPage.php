@@ -1,5 +1,4 @@
-<?php include "header.php"; ?>
-
+<?php session_start(); ?>
 <style>
   body {
     font-family: 'Open Sans', sans-serif;
@@ -60,7 +59,13 @@
     <li>
       <a href="delete.php"><strong>Delete</strong> <span>- delete a user</span></a>
     </li>
+  
   </ul>
+  <?php if (isset($_SESSION['Username'])) : ?>
+        <form action="logout.php" name="Logout_Form" class="form-signin">
+            <button name="Submit" value="Logout" class="button" type="submit">Log out</button>
+        </form>
+    <?php endif; ?>
 </div>
 
 <?php include "footer.php"; ?>

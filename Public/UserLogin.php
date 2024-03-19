@@ -1,42 +1,43 @@
 <?php
 require_once('../config.php');
 require_once('../src/DBconnect.php');
-require_once('Customer.php'); // Include the User class file
+require_once('Customer.php'); // Include the Customer class file
+require ('header.php');
+
 
 session_start();
 
-if(isset($_POST['Submit'])) {
-
-   
- 
+if (isset($_POST['Submit'])) {
     $username = $_POST['Username'];
     $password = $_POST['Password'];
 
-    // Create an instance of the User class
-    $user = new User($connection);
+    // Create an instance of the Customer class
+    $customer = new Customer($connection);
 
-    // Set username and password using setters
-    $user->setUsername($username);
-    $user->setPassword($password);
+    // Set username using setters
+    $customer->setUsername($username);
 
-    // Authentication logic directly within the login script
-    $stmt = $connection->prepare("SELECT * FROM user WHERE username = ?");
-    $stmt->execute([$user->getUsername()]);
-    $authenticatedUser = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Retrieve user record from the database
+    $authenticatedUser = $customer->authenticate();
 
-    // Verify if the user exists and the password matches
-    if ($authenticatedUser && password_verify($user->getPassword(), $authenticatedUser['password'])) {
-        $_SESSION['UserID'] = $authenticatedUser['UserID'];
-        $_SESSION['Username'] = $authenticatedUser['username'];
-        $_SESSION['Active'] = true;
+        if ($authenticatedUser) {
+            session_start();
+            $_SESSION['UserID'] = $authenticatedUser['UserID'];
+            $_SESSION['Username'] = $authenticatedUser['username'];
+            $_SESSION['Active'] = true;
 
-        header("location:index.php");
-        exit;
-    } else {
-        $error = "Incorrect Username or Password";
-    }
+            header("location:index.php");
+            exit();
+        } else {
+            $error = "Authentication failed after registration. Please try logging in manually.";
+        } 
+    
+}
+else {
+    $error = "Please try logging in again"; 
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>

@@ -1,6 +1,6 @@
 <?php 
 
-global$connection;
+require "SessionActive.php"; 
 
 ?>
 <!DOCTYPE html>

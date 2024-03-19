@@ -1,7 +1,7 @@
 <?php
 require_once('../config.php');
 require_once('../src/DBconnect.php');
-require_once('User.php');
+require_once 'customer.php';
 require ('header.php');
 
 if (isset($_POST['submit'])) {
@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
     require_once '../src/DBconnect.php';
 
     // Create a new User object with the database connection
-    $user = new User($connection);
+    $user = new customer($connection);
 
     // Get form data and set it to the user object
     $user->setFirstName($_POST['firstname']);
@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
     $user->setContactNo($_POST['contactno']);
     $user->setLocation($_POST['location']);
 
-    // Attempt to register the user and pass the form data as arguments
+    //Attempt to register the user and pass the form data as arguments
     $result = $user->register(
         $_POST['firstname'],
         $_POST['lastname'],
