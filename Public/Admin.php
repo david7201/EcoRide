@@ -7,7 +7,7 @@ require_once '../src/DBconnect.php';
 require_once('User.php');
 
 class Admin extends User {
-    private $connection;
+    protected $connection;
 
     public function __construct($connection) {
         parent::__construct($connection); // Call parent constructor
