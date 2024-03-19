@@ -135,6 +135,9 @@ class customer extends user {
         return $this->connection;
     }
 
+    public function registerUser($firstname, $lastname, $username, $password, $age, $email, $contactno, $location)
+    {
+    }
 
 
 }
