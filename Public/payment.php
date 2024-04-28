@@ -19,12 +19,13 @@ class Payment {
     private $verification;
     private $reservation;
 
-    public function __construct($connection) {
+    public function __construct($connection, $car, $verification, $reservation) {
         $this->conn = $connection;
-        $this->car = new Car(); 
-        $this->verification = new Verification($connection);
-        $this->reservation = new Reservation(); 
+        $this->car = $car; 
+        $this->verification = $verification;
+        $this->reservation = $reservation; 
     }
+
     public function getTotalDays() {
         return $this->reservation->getTotal();
     }
@@ -89,3 +90,4 @@ class Payment {
         }
     }
 }
+?>

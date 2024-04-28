@@ -69,34 +69,24 @@ class Employee extends User {
             $statement = $this->connection->prepare($query);
             $statement->execute([$email]);
             $count = $statement->fetchColumn();
-
+    
             if ($count > 0) {
                 return "Email address already exists.";
             }
-
+    
+            // Hash the password
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    
             // Prepare the SQL statement for employee registration
             $query = "INSERT INTO employee (firstname, lastname, username, password, age, email, contactno, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $statement = $this->connection->prepare($query);
-
+    
             // Execute the statement with the provided values
-            $statement->execute([$firstname, $lastname, $username, $password, $age, $email, $contactno, $location]);
-
+            $statement->execute([$firstname, $lastname, $username, $hashedPassword, $age, $email, $contactno, $location]);
+    
             return true; // Return true on successful registration
         } catch (PDOException $e) {
             return $e->getMessage(); // Return error message if an exception occurs
-        }
-    }
-
-    // Method to authenticate an employee
-    public function authenticate() {
-        try {
-            $query = "SELECT * FROM employee WHERE username = ?";
-            $statement = $this->connection->prepare($query);
-            $statement->execute([$this->username]);
-            $employee = $statement->fetch(PDO::FETCH_ASSOC);
-            return $employee;
-        } catch (PDOException $e) {
-            return null; // Return null if an exception occurs
         }
     }
 }

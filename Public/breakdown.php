@@ -1,15 +1,19 @@
-<?php
+<?php 
 require_once '../src/DBconnect.php';
-require_once ('../config.php');
+require_once '../config.php';
 
-class breakdown {
+class Breakdown {
     private $conn;
+    private $employee;
+    private $breakdown;
     private $name;
     private $email;
     private $message;
 
-    public function __construct($connection) {
+    public function __construct($connection, $employee) {
         $this->conn = $connection;
+        $this->employee = $employee;
+        $this->breakdown = $breakdown;
     }
 
     public function setName($name) {
@@ -59,15 +63,14 @@ class breakdown {
         }
     }
 
-    public function aggregateData($employee) {
-
+    public function aggregateData() {
         $employeeData = [
-            'firstname' => $employee->getFirstName(),
-            'lastname' => $employee->getLastName(),
-            'age' => $employee->getAge(),
-            'email' => $employee->getEmail(),
-            'contactno' => $employee->getContactno(),
-            'location' => $employee->getLocation()
+            'firstname' => $this->employee->getFirstName(),
+            'lastname' => $this->employee->getLastName(),
+            'age' => $this->employee->getAge(),
+            'email' => $this->employee->getEmail(),
+            'contactno' => $this->employee->getContactno(),
+            'location' => $this->employee->getLocation()
         ];
 
         $breakdownTowingData = [
@@ -84,4 +87,3 @@ class breakdown {
         return $aggregatedData;
     }
 }
-?>

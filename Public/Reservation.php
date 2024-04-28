@@ -10,7 +10,7 @@ class Reservation {
     public function setReservationID($reservationID) {
         $this->reservationID = $reservationID;
     }
-
+    
     public function setUserID($userID) {
         $this->userID = $userID;
     }
@@ -27,8 +27,25 @@ class Reservation {
         $this->total = $total;
     }
 
+    // Getter methods
     public function getReservationID() {
-        return $this->reservationID;
+        return $this->reservationID; 
+    }
+
+    public function getUserID() {
+        return $this->userID;
+    }
+
+    public function getCarID() {
+        return $this->carID;
+    }
+
+    public function getDate() {
+        return $this->date;
+    }
+
+    public function getTotal() {
+        return $this->total;
     }
 
     public function save($connection) {

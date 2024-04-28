@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="text" id="card_number" name="card_number" required><br>
 
         <label for="name_on_card">Name on Card:</label><br>
-        <input type="text" id="name_on_card" name="name_on_card" required><br>
+        <input type="text" id="name_on_card"   name="name_on_card" required><br>
 
         <label for="cvv">CVV:</label><br>
         <input type="text" id="cvv" name="cvv" required><br>

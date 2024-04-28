@@ -4,16 +4,12 @@ require_once('sessionactive.php');
 require_once "header.php";
 require_once "Reservation.php";
 
-// Function to generate a unique reservation number
-
-
 if (isset($_POST['submit'])) {
     require_once "../src/DBconnect.php";
     
     try {
         $reservation = new Reservation();
-        // $reservation->setUserID($_POST['userID']);
-        $reservation->setCarID($_POST['carID']);
+        $reservation->setCarID($_POST['carID']); // Set Car ID from user input
         $reservation->setDate($_POST['date']);
         $reservation->setTotal($_POST['total']);
         
@@ -27,8 +23,6 @@ if (isset($_POST['submit'])) {
         echo "Error: " . $error->getMessage();
     }
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -44,12 +38,9 @@ if (isset($_POST['submit'])) {
 <body>
     <h2>Make a Reservation</h2>
     <form method="post">
-        <!-- Car ID field with value from URL parameter -->
+        <!-- Car ID input field -->
         <label for="carID">Car ID:</label>
-        <!-- <input type="hidden" name="userID" value="<?php // echo $_SESSION['userID']; ?>"> -->
-
-        <input type="text" name="carID" id="carID" value="<?php echo $carID; ?>" >
-
+        <input type="text" name="carID" id="carID" required>
         
         <!-- Other reservation fields -->
         <label for="date">Date:</label>

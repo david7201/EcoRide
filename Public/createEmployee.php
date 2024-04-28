@@ -9,6 +9,7 @@ require_once('header.php');
 
 
 
+
 if (isset($_POST['submit'])) {
     try {
         $employee = new Employee($connection);
@@ -21,9 +22,23 @@ if (isset($_POST['submit'])) {
         $employee->setContactNo($_POST['contactno']); // Set the contact number
         $employee->setLocation($_POST['location']);
 
-        $employee->insertEmployee(); // Method to insert employee into the database
+        $result = $employee->register(
+            $_POST['firstname'],
+            $_POST['lastname'],
+            $_POST['username'],
+            $_POST['password'],
+            $_POST['age'],
+            $_POST['email'],
+            $_POST['contactno'],
+            $_POST['location']
+        );
 
-        echo ($_POST['firstname']) . ' successfully added.';
+        if ($result === true) {
+            header("Location: driverint.php"); // Redirect to login page
+            exit();
+        } else {
+            echo $result; // Output the error message returned by the register() method
+        }
     } catch(PDOException $error) {
         echo $error->getMessage();
     }

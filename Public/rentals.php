@@ -93,7 +93,6 @@ if ($cars && count($cars) > 0) {
                     <img src="<?php echo escape($car->get_image()); ?>" alt="Car Image">
                 <?php } ?>
                 <form action="addreservation.php" method="post">
-    <input type="id" name="carid" value="0">
     <button type="submit">Reserve</button>
 </form>
 

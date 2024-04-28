@@ -44,7 +44,7 @@ require_once('sessionactive.php');
 </style>
 
 <div class="container">
-  <h1>ADMIN Page</h1>
+  <h1>DRIVER Page</h1>
   <ul>
     <li>
       <a href="viewreservation.php"><strong>View Reservations</strong></a>
