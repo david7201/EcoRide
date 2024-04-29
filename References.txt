@@ -11,5 +11,8 @@ https://stackoverflow.com/questions/4015729/what-is-php-session-start,
 https://stackoverflow.com/questions/43630810/how-to-use-pdo-connection-in-other-classes, 
 https://stackoverflow.com/questions/6239598/prepared-statements-with-oop-php-mysql, 
 https://stackoverflow.com/questions/50987728/prepared-statement-php-oop),
- codeReview(https://codereview.stackexchange.com/questions/227418/connect-to-database-handling-errors,
- https://codereview.stackexchange.com/questions/13639/php-login-user-creation-validation-function/13854#13854).
+codeReview(https://codereview.stackexchange.com/questions/227418/connect-to-database-handling-errors,
+https://codereview.stackexchange.com/questions/13639/php-login-user-creation-validation-function/13854#13854).
+
+
+Contribution Statements: David: 33%, Dom: 33%, Sam: 33%.
