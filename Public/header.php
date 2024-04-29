@@ -160,7 +160,6 @@ if (isset($_SESSION['username'])) {
       <li><a href="Index.php">Home</a></li>
       <li><a href="services.php">Services</a></li>
       <li><a href="rentals.php">Rentals</a></li>
-      <li><a href="cart.php">VIEW CART</a></li>
     </ul>
      
     

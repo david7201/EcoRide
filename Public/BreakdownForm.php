@@ -1,5 +1,7 @@
 <?php
 require_once 'breakdown.php';
+require_once 'sessionactive.php';
+
 require_once '../config.php';
 require_once '../src/DBconnect.php';
 require_once 'header.php';
