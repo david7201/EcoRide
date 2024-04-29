@@ -75,17 +75,7 @@ CREATE TABLE Administrator (
   `Password` varchar(255)
 );
 
-CREATE TABLE `payment` (
-  `PaymentID` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `Total_Amount` decimal(10,0) NOT NULL,
-  `Payment_Date` datetime DEFAULT NULL,
-  `Payment_Method` varchar(45) DEFAULT NULL,
-  `Payment_Status` varchar(45) DEFAULT NULL,
-  `Credit_card_no` int NOT NULL,
-  `Banking_Details` varchar(45) DEFAULT NULL,
-  `Reservation_reservationID` int NOT NULL,
-  FOREIGN KEY (`Reservation_reservationID`) REFERENCES `reservation` (`reservationID`)
-);
+
 
 CREATE TABLE Cancellation (
   `CancellationID` int AUTO_INCREMENT PRIMARY KEY,
