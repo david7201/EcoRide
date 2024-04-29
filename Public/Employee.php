@@ -10,8 +10,8 @@ class Employee extends User {
     private $location;
 
     public function __construct($connection) {
-        parent::__construct($connection); // Call parent constructor
-        $this->connection = $connection; // Set the connection property
+        parent::__construct($connection); 
+        $this->connection = $connection; 
     }
 
     public function setFirstName($firstname) {
@@ -64,30 +64,37 @@ class Employee extends User {
 
     public function register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location) {
         try {
-            // Check if the email already exists in the database
             $query = "SELECT COUNT(*) FROM employee WHERE email = ?";
             $statement = $this->connection->prepare($query);
             $statement->execute([$email]);
             $count = $statement->fetchColumn();
-    
+
             if ($count > 0) {
                 return "Email address already exists.";
             }
-    
-            // Hash the password
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    
-            // Prepare the SQL statement for employee registration
+
+
             $query = "INSERT INTO employee (firstname, lastname, username, password, age, email, contactno, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $statement = $this->connection->prepare($query);
-    
-            // Execute the statement with the provided values
-            $statement->execute([$firstname, $lastname, $username, $hashedPassword, $age, $email, $contactno, $location]);
-    
-            return true; // Return true on successful registration
+
+            $statement->execute([$firstname, $lastname, $username, $password, $age, $email, $contactno, $location]);
+
+            return true; 
         } catch (PDOException $e) {
-            return $e->getMessage(); // Return error message if an exception occurs
+            return $e->getMessage(); 
         }
     }
+
+    public function authenticate() {
+        try {
+            $query = "SELECT * FROM employee WHERE username = ?";
+            $statement = $this->connection->prepare($query);
+            $statement->execute([$this->username]);
+            $employee = $statement->fetch(PDO::FETCH_ASSOC);
+            return $employee;
+        } catch (PDOException $e) {
+            return null; 
+    }
 }
-?>
+}
+

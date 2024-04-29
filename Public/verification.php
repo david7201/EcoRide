@@ -3,12 +3,15 @@ require_once('sessionactive.php');
 
 require_once '../src/DBconnect.php';
 
+
+
+
 class Verification {
-    private $conn;
-    private $first_name;
-    private $last_name;
-    private $phone_number;
-    private $passport_number;
+    public $conn;
+    public $first_name;
+    public $last_name;
+    public $phone_number;
+    public $passport_number;
 
     public function __construct($connection) {
         $this->conn = $connection;
@@ -29,29 +32,23 @@ class Verification {
     public function setPassportNumber($passport_number) {
         $this->passport_number = $passport_number;
     }
-
-    public function insertVerification() {
-        try {
-            $sql = "INSERT INTO Verification (first_name, last_name, phone_number, passport_number) VALUES (:first_name, :last_name, :phone_number, :passport_number)";
-            $stmt = $this->conn->prepare($sql);
-
-            $params = [
-                ':first_name' => $this->first_name,
-                ':last_name' => $this->last_name,
-                ':phone_number' => $this->phone_number,
-                ':passport_number' => $this->passport_number
-            ];
-
-            if ($stmt->execute($params)) {
-                echo "Data inserted successfully!";
-            } else {
-                echo "Error: " . $stmt->errorInfo()[2]; 
-            }
-
-            $stmt->closeCursor();
-        } catch (PDOException $error) {
-            echo "Error inserting data: " . $error->getMessage();
-        }
+    public function getFirstName() {
+        return $this->first_name;
     }
+    
+    public function getLastName() {
+        return $this->last_name;
+    }
+    
+    public function getPhoneNumber() {
+        return $this->phone_number;
+    }
+    
+    public function getPassportNumber() {
+        return $this->passport_number;
+    }
+
+
+    
 }
 

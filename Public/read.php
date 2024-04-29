@@ -1,19 +1,13 @@
 <?php
-/**
- * Function to query information based on
- * a parameter: in this case, id.
- *
- */
+
 if (isset($_POST['submit'])) {
     try {
         require "../common.php";
         require_once '../src/DBconnect.php';
-        // Adjusted to select from employee table based on id
         $sql = "SELECT * FROM employee WHERE id = :id";
-        $id = $_POST['id']; // Changed to capture 'id' from the form
+        $id = $_POST['id']; 
         $statement = $connection->prepare($sql);
-        $statement->bindParam(':id', $id, PDO::PARAM_INT); // Binding id as an integer
-        $statement->execute();
+        $statement->bindParam(':id', $id, PDO::PARAM_INT); 
         $result = $statement->fetchAll();
     } catch(PDOException $error) {
         echo $sql . "<br>" . $error->getMessage();
@@ -58,7 +52,7 @@ if (isset($_POST['submit'])) {
 <h2>Find Employee based on ID</h2>
 <form method="post">
     <label for="id">Employee ID</label>
-    <input type="text" id="id" name="id"> <!-- Adjusted for 'id' -->
+    <input type="text" id="id" name="id"> 
     <input type="submit" name="submit" value="View Results">
 </form>
 <a href="index.php">Back to home</a>

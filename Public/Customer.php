@@ -12,8 +12,8 @@ class Customer extends User {
       
 
     public function __construct($connection) {
-        parent::__construct($connection); // Call parent constructor
-        $this->connection = $connection; // Set the connection property
+        parent::__construct($connection); 
+        $this->connection = $connection; 
     }
 
     public function setFirstName($firstname) {
@@ -67,7 +67,6 @@ class Customer extends User {
     
 public function register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location) {
     try {
-        // Check if the email already exists in the database
         $query = "SELECT COUNT(*) FROM user WHERE email = ?";
         $statement = $this->connection->prepare($query);
         $statement->execute([$email]);
@@ -77,21 +76,17 @@ public function register($firstname, $lastname, $username, $password, $age, $ema
             return "Email address already exists.";
         }
 
-        // Prepare the SQL statement for user registration
         $query = "INSERT INTO user (firstname, lastname, username, password, age, email, contactno, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $statement = $this->connection->prepare($query);
 
-        // Execute the statement with the provided values
         $statement->execute([$firstname, $lastname, $username, $password, $age, $email, $contactno, $location]);
 
-        return true; // Return true on successful registration
+        return true; 
     } catch (PDOException $e) {
-        return $e->getMessage(); // Return error message if an exception occurs
-    }
+        return $e->getMessage(); 
 }
 
 
-    // Method to authenticate a customer
     public function authenticate() {
         try {
             $query = "SELECT * FROM user WHERE username = ?";
@@ -100,8 +95,9 @@ public function register($firstname, $lastname, $username, $password, $age, $ema
             $user = $statement->fetch(PDO::FETCH_ASSOC);
             return $user;
         } catch (PDOException $e) {
-            return null; // Return null if an exception occurs
+            return null; 
         }
     }
+}
 }
 ?>

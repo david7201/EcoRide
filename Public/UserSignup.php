@@ -11,6 +11,14 @@ if (isset($_POST['submit'])) {
 
     $user = new Customer($connection); 
 
+    if (empty($_POST['firstname']) || empty($_POST['lastname']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['age']) || empty($_POST['email']) || empty($_POST['contactno']) || empty($_POST['location'])) {
+        $error = "Please fill out all fields";
+    } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        $error = "Invalid email format";
+    } elseif (!is_numeric($_POST['age']) || $_POST['age'] <= 0) {
+        $error = "Age must be a positive number";
+    } else {
+
     $user->setFirstName($_POST['firstname']);
     $user->setLastName($_POST['lastname']);
     $user->setUsername($_POST['username']);
@@ -48,14 +56,11 @@ if (isset($_POST['submit'])) {
     } else {
         $error = $result; 
     }
+ }
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>User Registration</title>
     <style>
 body {

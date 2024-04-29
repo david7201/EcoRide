@@ -1,5 +1,8 @@
 
-<?php require "header.php"; ?>
+<?php 
+require_once "header.php"
+
+?>
 <style>
   body {
     font-family: 'Open Sans', sans-serif;
@@ -35,7 +38,7 @@
     text-decoration: none;
     color: #2F3E34;
     font-weight: bold;
-    margin-right: 10px; /* Spacing between the link and the text */
+    margin-right: 10px; 
   }
   ul li span {
     color: #2F3E34;

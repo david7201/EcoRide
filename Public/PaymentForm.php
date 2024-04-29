@@ -1,26 +1,71 @@
 <?php
-require_once('sessionactive.php');
 require_once 'payment.php';
 require_once 'header.php';
 
-$paymentProcessor = new Payment($connection);
+class PaymentForm extends Payment {
+    public $connection; 
+    public $amount;
+    public $payment_date;
+    public $payment_method;
+    public $card_number;
+    public $name_on_card;
+    public $cvv;
+    public $expiration_date;
+    public $status;
+
+    public function __construct($connection) {
+        $this->connection = $connection;
+    }
+
+    public function insertPayment() {
+        try {
+            
+            $totalAmount = 80 * $this->amount;
+
+            $sql = "INSERT INTO Payment (amount, payment_date, payment_method, card_number, name_on_card, cvv, expiration_date, status) VALUES (:amount, :payment_date, :payment_method, :card_number, :name_on_card, :cvv, :expiration_date, :status)";
+            $stmt = $this->connection->prepare($sql);
+
+            if ($stmt->execute([
+                ':amount' => $totalAmount,
+                ':payment_date' => $this->payment_date,
+                ':payment_method' => $this->payment_method,
+                ':card_number' => $this->card_number,
+                ':name_on_card' => $this->name_on_card,
+                ':cvv' => $this->cvv,
+                ':expiration_date' => $this->expiration_date,
+                ':status' => $this->status
+            ])) {
+                echo "Data inserted successfully!";
+            } else {
+                echo "Error: " . $sql . "<br>" . $this->connection->error;
+            }
+
+            $stmt->closeCursor();
+        } catch (PDOException $error) {
+            echo "Error inserting data: " . $error->getMessage();
+        }
+    }
+}
+
+// Assuming $connection is defined elsewhere
+$paymentForm = new PaymentForm($connection);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+    // Set payment details from POST data
+    $paymentForm->amount = $_POST["reservation_days"];
+    $paymentForm->payment_date = $_POST["payment_date"];
+    $paymentForm->payment_method = $_POST["payment_method"];
+    $paymentForm->card_number = $_POST["card_number"];
+    $paymentForm->name_on_card = $_POST["name_on_card"];
+    $paymentForm->cvv = $_POST["cvv"];
+    $paymentForm->expiration_date = $_POST["expiration_date"];
+    $paymentForm->status = "successful";
 
-    $paymentProcessor->setPaymentDate($_POST["payment_date"]);
-    $paymentProcessor->setPaymentMethod($_POST["payment_method"]);
-    $paymentProcessor->setCardNumber($_POST["card_number"]);
-    $paymentProcessor->setNameOnCard($_POST["name_on_card"]);
-    $paymentProcessor->setCVV($_POST["cvv"]);
-    $paymentProcessor->setExpirationDate($_POST["expiration_date"]);
-    $paymentProcessor->setStatus("successful");
+    // Insert payment
+    $paymentForm->insertPayment();
 
-    $paymentProcessor->insertPayment();
-
-        header("Location: Index.php");
-        exit();
-    
+    header("Location: Index.php");
+    exit();
 }
 
 ?>
@@ -35,11 +80,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <h2>Payment Form</h2>
     <form id="paymentForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <label for="reservation_days">Enter Number of Days for Reservation:</label><br>
+    <label for="reservation_days">Enter Number of Days for Reservation:</label>
         <input type="number" id="reservation_days" name="reservation_days" required oninput="updateTotalAmount()"><br>
 
-        <label for="total_amount">Total Amount:</label><br>
-        <input type="text" id="total_amount" name="total_amount" value="0" readonly><br>
 
         <label for="payment_date">Payment Date:</label><br>
         <input type="date" id="payment_date" name="payment_date" required><br>
@@ -55,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="text" id="card_number" name="card_number" required><br>
 
         <label for="name_on_card">Name on Card:</label><br>
-        <input type="text" id="name_on_card"   name="name_on_card" required><br>
+        <input type="text" id="name_on_card" name="name_on_card" required><br>
 
         <label for="cvv">CVV:</label><br>
         <input type="text" id="cvv" name="cvv" required><br>
@@ -72,9 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script>
         function updateTotalAmount() {
             var reservationDays = document.getElementById("reservation_days").value;
-            
             var totalAmount = 80 * reservationDays;
-            
             document.getElementById("total_amount").value = totalAmount;
         }
     </script>

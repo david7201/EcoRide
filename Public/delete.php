@@ -1,7 +1,5 @@
 <?php
-/**
- * Delete a user
- */
+
 require "../common.php";
 if (isset($_GET["id"])) {
  try {

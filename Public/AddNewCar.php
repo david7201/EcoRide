@@ -3,12 +3,34 @@ global $connection;
 require_once('sessionactive.php');
 
 require "header.php";
-require "car.php"; // Ensure this path is correct
-require "../src/DBconnect.php"; // Database connection
+require "car.php"; 
+require "../src/DBconnect.php"; 
+
+class addnewcar extends car{
+
+    function save($connection) {
+        $sql = "INSERT INTO car (Brand, Model, BodyType, Color, Seats, FuelType, Description, status, image) VALUES (:brand, :model, :bodyType, :color, :seats, :fuelType, :description, :status, :image)";
+        $statement = $connection->prepare($sql);
+        $statement->execute([
+            'brand' => $this->brand,
+            'model' => $this->model,
+            'bodyType' => $this->bodyType,
+            'color' => $this->color,
+            'seats' => $this->seats,
+            'fuelType' => $this->fuelType,
+            'description' => $this->description,
+            'status' => $this->status,
+            'image' => $this->image
+        ]);
+
+        $carId = $connection->lastInsertId();
+        return $carId; 
+    }
+}
 
 if (isset($_POST['submit'])) {
     try {
-        $car = new Car();
+        $car = new addnewcar();
         $car->set_brand($_POST['brand']);
         $car->set_model($_POST['model']);
         $car->set_bodyType($_POST['bodyType']);
@@ -19,9 +41,9 @@ if (isset($_POST['submit'])) {
         $car->set_status($_POST['status']);
         $car->set_image($_POST['image']);
 
-        $car->save($connection);
+        $carId = $car->save($connection);
 
-        echo "Car successfully added.";
+        echo "Car successfully added with ID: $carId";
     } catch(PDOException $error) {
         echo "Error: " . $error->getMessage();
     }

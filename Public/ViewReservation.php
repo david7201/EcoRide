@@ -42,7 +42,7 @@ require_once 'sessionactive.php';
 <?php
 require "../common.php";
 require_once '../src/DBconnect.php';
-require_once 'Reservation.php'; 
+require_once 'reservation.php'; 
 
 try {
     $sql = "SELECT * FROM reservation";
@@ -52,22 +52,9 @@ try {
     $reservations = [];
     while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
         $reservation = new Reservation();
-        // Ensure keys exist before accessing them
-        if (isset($row["ReservationID"])) {
-            $reservation->setReservationID($row["ReservationID"]);
-        }
-        if (isset($row["UserID"])) {
-            $reservation->setUserID($row["UserID"]);
-        }
-        if (isset($row["CarID"])) {
-            $reservation->setCarID($row["CarID"]);
-        }
-        if (isset($row["Pickup_Date"])) {
-            $reservation->setDate($row["Pickup_Date"]);
-        }
-        if (isset($row["Total_Days"])) {
-            $reservation->setTotal($row["Total_Days"]);
-        }
+        $reservation->setCarID($row["CarID"]);
+        $reservation->setDate($row["Pickup_Date"]);
+        $reservation->setTotal($row["Total_Days"]);
         $reservations[] = $reservation;
     }
 } catch(PDOException $error) {
@@ -80,8 +67,7 @@ if ($reservations && count($reservations) > 0) {
     <div class="container">
         <?php foreach ($reservations as $reservation) { ?>
             <div class="reservation">
-                <h3>Reservation ID: <?php echo $reservation->getReservationID(); ?></h3>
-                <p><strong>User ID:</strong> <?php echo $reservation->getUserID(); ?></p>
+                <h3>Reservation ID: <?php echo $reservation->getCarID(); ?></h3>
                 <p><strong>Car ID:</strong> <?php echo $reservation->getCarID(); ?></p>
                 <p><strong>Pickup Date:</strong> <?php echo $reservation->getDate(); ?></p>
                 <p><strong>Total Days:</strong> <?php echo $reservation->getTotal(); ?></p>

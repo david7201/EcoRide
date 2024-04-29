@@ -36,7 +36,7 @@ require_once('sessionactive.php');
     text-decoration: none;
     color: #2F3E34;
     font-weight: bold;
-    margin-right: 10px; /* Spacing between the link and the text */
+    margin-right: 10px; 
   }
   ul li span {
     color: #2F3E34;
@@ -44,7 +44,7 @@ require_once('sessionactive.php');
 </style>
 
 <div class="container">
-  <h1>DRIVER Page</h1>
+  <h1>Driver's Page</h1>
   <ul>
     <li>
       <a href="viewreservation.php"><strong>View Reservations</strong></a>
@@ -55,9 +55,7 @@ require_once('sessionactive.php');
     <li>
       <a href="viewbreakdown.php"><strong>View Breakdown and towing messages</strong></a>
     </li>
-    <li>
-      <a href="deletebreakdown.php"><strong>Delete Breakdown and towing messages</strong></a>
-    </li>
+   
   
   </ul>
   <?php if (isset($_SESSION['Username'])) : ?>

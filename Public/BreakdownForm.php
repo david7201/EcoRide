@@ -2,18 +2,47 @@
 require_once 'breakdown.php';
 require_once '../config.php';
 require_once '../src/DBconnect.php';
+require_once 'header.php';
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = htmlspecialchars($_POST['name']);
-    $email = htmlspecialchars($_POST['email']);
-    $message = htmlspecialchars($_POST['message']);
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $message = $_POST['message'];
 
-    $processor = new breakdown($connection);
+    if (empty($name) || empty($email) || empty($message)) {
+        echo "Please fill out all fields";
+        exit();
+    }
 
-    $processor->setName($name);
-    $processor->setEmail($email);
-    $processor->setMessage($message);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Invalid email format";
+        exit();
+    }
 
-    $processor->insertBreakdown();
+    $name = sanitizeInput($name);
+    $email = sanitizeInput($email);
+    $message = sanitizeInput($message);
+
+    try {
+        $processor = new breakdown($connection);
+
+        $processor->setName($name);
+        $processor->setEmail($email);
+        $processor->setMessage($message);
+
+        $processor->insertBreakdown();
+        echo "Breakdown submitted successfully!";
+    } catch(PDOException $error) {
+        echo "Error: " . $error->getMessage();
+    }
+}
+
+function sanitizeInput($input) {
+    $input = trim($input);
+    $input = stripslashes($input);
+    $input = htmlspecialchars($input);
+    return $input;
 }
 ?>
 
@@ -26,7 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <h2>Breakdown Form</h2>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+
+    <form method="post">
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name"><br>
 

@@ -9,33 +9,50 @@ require_once 'sessionactive.php';
     <title>All Cars</title>
     <style>
   .container {
-    max-width: 50%;
+    max-width: 90%;
     margin: auto;
     display: grid;
-    grid-template-columns: repeat(5, minmax(100px, 1fr)); 
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 20px; 
 }
 
 .car {
     background-color: #fff;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
+    border-radius: 10px; 
+    padding: 20px; 
     text-align: center;
-    width: 500px; 
-    height: 600px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .car h3 {
-    margin-bottom: 5px;
-    font-size: 14px; 
+    margin-bottom: 10px; 
+    font-size: 16px; 
+}
+
+.car p {
+    margin-bottom: 8px;
 }
 
 .car img {
     width: 100%;
-    max-width: 80px; 
+    max-width: 150px; 
     height: auto;
-    margin-bottom: 5px;
+    margin: 10px auto; 
+}
+
+.car button {
+    padding: 10px 20px; 
+    border: none;
+    border-radius: 5px;
+    background-color: #A9C9A4;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.car button:hover {
+    background-color: #0056b3;
 }
 
 
@@ -68,15 +85,21 @@ try {
         $car->set_amount($row["amount"]); 
         $car->set_image($row["image"]);
         $cars[] = $car;
+
+        $_SESSION['carID'] = $car->get_id();
+
     }
 } catch(PDOException $error) {
     echo $sql . "<br>" . $error->getMessage();
 }
 
 require "header.php";
+echo "<p style='font-size: 12px; color: #888;'>Please remember the car ID to proceed or delete a reservation.</p>";
+
 
 if ($cars && count($cars) > 0) {
     ?>
+    
     <h2>All Cars</h2>
     <div class="container">
         <?php foreach ($cars as $car) { ?>
@@ -88,22 +111,31 @@ if ($cars && count($cars) > 0) {
                 <p><strong>Seats:</strong> <?php echo escape($car->get_seats()); ?></p>
                 <p><strong>Fuel Type:</strong> <?php echo escape($car->get_fuelType()); ?></p>
                 <p><strong>Description:</strong> <?php echo escape($car->get_description()); ?></p>
-                <p><strong>Amount:</strong> $<?php echo escape($car->get_amount()); ?></p> <!-- Display the amount -->
+                <p><strong>Amount:</strong> $<?php echo escape($car->get_amount()); ?></p> 
                 <?php if ($car->get_image()) { ?>
                     <img src="<?php echo escape($car->get_image()); ?>" alt="Car Image">
                 <?php } ?>
-                <form action="addreservation.php" method="post">
-    <button type="submit">Reserve</button>
-</form>
+<form action="addreservation.php" method="post">
+<input type="hidden" name="carid" value="<?php echo escape($car->get_id()); ?>">
+    <button type="submit" name="reserve">Reserve</button>
+</form><?php
+$_SESSION['carID'] = $car->get_id();?>
+
+
+
+
 
             </div>
         <?php } ?>
     </div>
 <?php 
+
+
 } else { ?>
     <p>No cars found.</p>
 <?php
 }
+
 
 require "footer.php";
 ?>

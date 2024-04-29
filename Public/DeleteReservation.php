@@ -16,7 +16,7 @@ class ReservationProcessor {
 
     public function deleteReservation() {
         try {
-            $sql = "DELETE FROM reservation WHERE reservationID = :reservationID"; // Adjusted column name
+            $sql = "DELETE FROM reservation WHERE reservationID = :reservationID"; 
             $statement = $this->connection->prepare($sql);
             $statement->bindValue(':reservationID', $this->reservation_number);
             $statement->execute();
@@ -32,16 +32,13 @@ class ReservationProcessor {
     }
 }
 
-// Create an instance of ReservationProcessor with the database connection
 $reservationProcessor = new ReservationProcessor($connection);
 
-// Check if reservation ID is provided via POST request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $reservationProcessor->setReservationNumber($_POST['delete_reservation_id']);
     $reservationProcessor->deleteReservation();
 }
 
-// Include header template
 require "header.php";
 ?>
 

@@ -30,21 +30,7 @@ class Car {
       return $this->image;
     }
     
-    function save($connection) {
-      $sql = "INSERT INTO car (Brand, Model, BodyType, Color, Seats, FuelType, Description, status, image) VALUES (:brand, :model, :bodyType, :color, :seats, :fuelType, :description, :status, :image)";
-      $statement = $connection->prepare($sql);
-      $statement->execute([
-          'brand' => $this->brand,
-          'model' => $this->model,
-          'bodyType' => $this->bodyType,
-          'color' => $this->color,
-          'seats' => $this->seats,
-          'fuelType' => $this->fuelType,
-          'description' => $this->description,
-          'status' => $this->status,
-          'image' => $this->image
-      ]);
-  }
+    
   
   
   

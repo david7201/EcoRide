@@ -1,20 +1,58 @@
 <?php
 require_once('sessionactive.php');
 
-require_once 'verification.php'; 
+require 'verification.php'; 
 require "header.php";
-$verificationProcessor = new verification($connection);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $verificationProcessor->setFirstName($_POST["first_name"]);
-    $verificationProcessor->setLastName($_POST["last_name"]);
-    $verificationProcessor->setPhoneNumber($_POST["phone_number"]);
-    $verificationProcessor->setPassportNumber($_POST["passport_number"]);
+class verificationform extends verification {
 
-    $verificationProcessor->insertVerification();
-    header("Location: paymentform.php");
+   
+
+    public function insertVerification() {
+        try {
+            $sql = "INSERT INTO Verification (first_name, last_name, phone_number, passport_number) VALUES (:first_name, :last_name, :phone_number, :passport_number)";
+            $stmt = $this->conn->prepare($sql);
+
+            $params = [
+                ':first_name' => $this->first_name,
+                ':last_name' => $this->last_name,
+                ':phone_number' => $this->phone_number,
+                ':passport_number' => $this->passport_number
+            ];
+
+            if ($stmt->execute($params)) {
+                echo "Data inserted successfully!";
+            } else {
+                echo "Error: " . $stmt->errorInfo()[2]; 
+            }
+
+            $stmt->closeCursor();
+        } catch (PDOException $error) {
+            echo "Error inserting data: " . $error->getMessage();
+        }
+    }
 }
 
+
+
+
+
+$verificationProcessor = new Verification($connection);
+
+
+$verificationForm = new verificationform($connection);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Set properties directly
+    $verificationForm->first_name = $_POST["first_name"];
+    $verificationForm->last_name = $_POST["last_name"];
+    $verificationForm->phone_number = $_POST["phone_number"];
+    $verificationForm->passport_number = $_POST["passport_number"];
+
+    $verificationForm->insertVerification(); 
+    header("Location: paymentform.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -43,3 +81,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 </body>
 </html>
+
+    
