@@ -1,0 +1,15 @@
+References:
+Web dev Tutorials: Symfony, powerpoints, word documents
+Software tutorials. Lecture videos, Notes, source code, powerpoints, word documents
+
+Outside references:
+validation: https://www.the-art-of-web.com/html/html5-form-validation/
+sessions and oop: https://www.youtube.com/watch?v=Ekk_N5X1ePI
+validation, sql queries, sessions, oop, sanitizing, PDO: W3Schools & stackoverflow(https://stackoverflow.com/questions/19033980/oop-with-sessions, https://codereview.stackexchange.com/questions/275321/proper-pdo-connection-function, 
+https://stackoverflow.com/questions/10962345/how-to-use-sessions-in-pdo, 
+https://stackoverflow.com/questions/4015729/what-is-php-session-start, 
+https://stackoverflow.com/questions/43630810/how-to-use-pdo-connection-in-other-classes, 
+https://stackoverflow.com/questions/6239598/prepared-statements-with-oop-php-mysql, 
+https://stackoverflow.com/questions/50987728/prepared-statement-php-oop),
+ codeReview(https://codereview.stackexchange.com/questions/227418/connect-to-database-handling-errors,
+ https://codereview.stackexchange.com/questions/13639/php-login-user-creation-validation-function/13854#13854).
