@@ -65,27 +65,27 @@ class Customer extends User {
     }
 
     
-public function register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location) {
-    try {
-        $query = "SELECT COUNT(*) FROM user WHERE email = ?";
-        $statement = $this->connection->prepare($query);
-        $statement->execute([$email]);
-        $count = $statement->fetchColumn();
+    public function register($firstname, $lastname, $username, $password, $age, $email, $contactno, $location) {
+        try {
+            $query = "SELECT COUNT(*) FROM user WHERE email = ?";
+            $statement = $this->connection->prepare($query);
+            $statement->execute([$email]);
+            $count = $statement->fetchColumn();
 
-        if ($count > 0) {
-            return "Email address already exists.";
+            if ($count > 0) {
+                return "Email address already exists.";
+            }
+
+            $query = "INSERT INTO user (firstname, lastname, username, password, age, email, contactno, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $statement = $this->connection->prepare($query);
+
+            $statement->execute([$firstname, $lastname, $username, $password, $age, $email, $contactno, $location]);
+
+            return true; 
+        } catch (PDOException $e) {
+            return $e->getMessage(); 
         }
-
-        $query = "INSERT INTO user (firstname, lastname, username, password, age, email, contactno, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $statement = $this->connection->prepare($query);
-
-        $statement->execute([$firstname, $lastname, $username, $password, $age, $email, $contactno, $location]);
-
-        return true; 
-    } catch (PDOException $e) {
-        return $e->getMessage(); 
-}
-
+    }
 
     public function authenticate() {
         try {
@@ -99,5 +99,5 @@ public function register($firstname, $lastname, $username, $password, $age, $ema
         }
     }
 }
-}
+
 ?>
